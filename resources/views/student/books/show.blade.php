@@ -56,12 +56,13 @@
         }
 
         /* FIX: img di atas gradient */
-        .related-cover>* {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%
-        }
+        .related-cover img,
+.related-cover .cover-gradient {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
 
         .related-cover img {
             object-fit: cover;

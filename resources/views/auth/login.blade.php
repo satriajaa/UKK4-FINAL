@@ -161,10 +161,10 @@
                             <label for="password" class="block text-sm font-medium text-gray-700">
                                 Kata Sandi
                             </label>
-                            <a href="{{ route('password.request') }}"
+                            {{-- <a href="{{ route('password.request') }}"
                                 class="text-sm text-[#166534] hover:text-[#0d3d2e] font-medium">
                                 Lupa Kata Sandi?
-                            </a>
+                            </a> --}}
                         </div>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">

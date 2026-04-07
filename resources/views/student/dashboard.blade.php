@@ -85,9 +85,9 @@
             Rp {{ number_format($totalFine, 0, ',', '.') }}
         </div>
         @if($totalFine > 0)
-        <div class="text-xs text-red-500 font-semibold mt-1">
+        {{-- <div class="text-xs text-red-500 font-semibold mt-1">
             <i class="fas fa-circle text-xs"></i> Harap segera dilunasi
-        </div>
+        </div> --}}
         @else
         <div class="text-xs text-evergreen-600 font-semibold mt-1">
             <i class="fas fa-check-circle"></i> Tidak ada tunggakan
