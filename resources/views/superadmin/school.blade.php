@@ -15,7 +15,9 @@
     {{-- ── PAGE HEADER ── --}}
     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-8">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900 tracking-tight mb-1">Registrasi Sekolah Baru</h1>
+            <h1 class="text-2xl font-bold text-gray-900 tracking-tight mb-1 flex items-center gap-2">
+                <i class="fas fa-plus-circle text-evergreen-600"></i> Registrasi Sekolah Baru
+            </h1>
             <p class="text-sm text-gray-500">Input data sekolah dan akun administrator untuk memberikan akses panel kelola kepada pihak sekolah.</p>
         </div>
         <span class="inline-flex items-center gap-1.5 bg-evergreen-50 border border-evergreen-200 text-evergreen-700 px-3 py-1.5 rounded-full text-[10px] font-bold tracking-wider uppercase flex-shrink-0">
@@ -29,8 +31,8 @@
         {{-- ── INFORMASI SEKOLAH ── --}}
         <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden mb-6 shadow-sm">
             <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                <div class="w-8 h-8 rounded-lg bg-evergreen-50 border border-evergreen-100 flex items-center justify-center text-sm">
-                    🏫
+                <div class="w-8 h-8 rounded-lg bg-evergreen-50 border border-evergreen-100 flex items-center justify-center">
+                    <i class="fas fa-school text-evergreen-600 text-sm"></i>
                 </div>
                 <h2 class="text-xs font-bold text-gray-900 tracking-wider">INFORMASI SEKOLAH</h2>
             </div>
@@ -38,8 +40,8 @@
             <div class="p-6 space-y-4">
                 {{-- Baris 1: Nama Sekolah --}}
                 <div>
-                    <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
-                        Nama Sekolah <span class="text-red-500">*</span>
+                    <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                        <i class="fas fa-building text-gray-400"></i> Nama Sekolah <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="name" value="{{ old('name') }}" placeholder="Contoh: SMA Negeri 01 Jakarta" required
                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-evergreen-500/20 focus:border-evergreen-500 transition focus:bg-white @error('name') border-red-500 @enderror">
@@ -49,8 +51,8 @@
                 {{-- Baris 2: NPSN & Email --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
-                            NPSN <span class="text-red-500">*</span>
+                        <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                            <i class="fas fa-id-badge text-gray-400"></i> NPSN <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input type="text" name="npsn" id="npsn-input" value="{{ old('npsn') }}" placeholder="8 digit nomor pokok" maxlength="8" oninput="validateNpsn(this)" required
@@ -61,8 +63,8 @@
                         @error('npsn') <p class="text-[10px] text-red-500 font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
-                            Email Sekolah <span class="text-red-500">*</span>
+                        <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                            <i class="fas fa-envelope text-gray-400"></i> Email Sekolah <span class="text-red-500">*</span>
                         </label>
                         <input type="email" name="email" value="{{ old('email') }}" placeholder="admin@sekolah.sch.id" required
                             class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-evergreen-500/20 focus:border-evergreen-500 transition focus:bg-white @error('email') border-red-500 @enderror">
@@ -72,15 +74,17 @@
 
                 {{-- Baris 3: Kontak --}}
                 <div>
-                    <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">Kontak / Telepon</label>
+                    <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                        <i class="fas fa-phone-alt text-gray-400"></i> Kontak / Telepon
+                    </label>
                     <input type="text" name="phone" value="{{ old('phone') }}" placeholder="021-xxxxxx"
                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-evergreen-500/20 focus:border-evergreen-500 transition focus:bg-white">
                 </div>
 
                 {{-- Baris 4: Alamat --}}
                 <div>
-                    <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
-                        Alamat Lengkap <span class="text-red-500">*</span>
+                    <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                        <i class="fas fa-map-marker-alt text-gray-400"></i> Alamat Lengkap <span class="text-red-500">*</span>
                     </label>
                     <textarea name="address" rows="3" placeholder="Jl. Raya Utama No. 123, Kota..." required
                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-evergreen-500/20 focus:border-evergreen-500 transition focus:bg-white resize-y min-h-[80px] @error('address') border-red-500 @enderror">{{ old('address') }}</textarea>
@@ -92,8 +96,8 @@
         {{-- ── INFORMASI ADMIN SEKOLAH ── --}}
         <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden mb-6 shadow-sm">
             <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-sm">
-                    👨‍💼
+                <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                    <i class="fas fa-user-tie text-blue-600 text-sm"></i>
                 </div>
                 <h2 class="text-xs font-bold text-gray-900 tracking-wider">INFORMASI ADMIN SEKOLAH</h2>
             </div>
@@ -101,8 +105,8 @@
             <div class="p-6 space-y-4">
                 {{-- Baris 1: Nama Admin --}}
                 <div>
-                    <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
-                        Nama Lengkap <span class="text-red-500">*</span>
+                    <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                        <i class="fas fa-user text-gray-400"></i> Nama Lengkap <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="admin_name" value="{{ old('admin_name') }}" placeholder="Masukkan nama penanggung jawab" required
                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-evergreen-500/20 focus:border-evergreen-500 transition focus:bg-white @error('admin_name') border-red-500 @enderror">
@@ -112,15 +116,17 @@
                 {{-- Baris 2: Username & Email Admin --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
-                            Username <span class="text-red-500">*</span>
+                        <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                            <i class="fas fa-at text-gray-400"></i> Username <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="username" value="{{ old('username') }}" placeholder="admin_sekolah" required oninput="this.value=this.value.replace(/[^a-z0-9_]/gi,'').toLowerCase()"
                             class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-evergreen-500/20 focus:border-evergreen-500 transition focus:bg-white @error('username') border-red-500 @enderror">
                         @error('username') <p class="text-[10px] text-red-500 font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">Email Pribadi</label>
+                        <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                            <i class="fas fa-envelope-open text-gray-400"></i> Email Pribadi
+                        </label>
                         <input type="email" name="admin_email" value="{{ old('admin_email') }}" placeholder="nama@email.com"
                             class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-evergreen-500/20 focus:border-evergreen-500 transition focus:bg-white">
                     </div>
@@ -129,8 +135,8 @@
                 {{-- Baris 3: Password & Confirm Password --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
-                            Password <span class="text-red-500">*</span>
+                        <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                            <i class="fas fa-lock text-gray-400"></i> Password <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input type="password" name="password" id="pw-input" placeholder="Min. 8 karakter" required oninput="checkStrength(this.value)"
@@ -149,8 +155,8 @@
                         @error('password') <p class="text-[10px] text-red-500 font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
-                            Konfirmasi Password <span class="text-red-500">*</span>
+                        <label class="flex items-center gap-1.5 text-[10px] font-bold tracking-[1.2px] uppercase text-gray-500 mb-1.5">
+                            <i class="fas fa-key text-gray-400"></i> Konfirmasi Password <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input type="password" name="password_confirmation" id="pw-confirm" placeholder="Ulangi password" required oninput="checkMatch()"
@@ -177,8 +183,8 @@
         {{-- ── ACTIONS ── --}}
         <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
             <a href="{{ route('superadmin.dashboard') }}"
-               class="px-5 py-2.5 bg-white border border-gray-200 text-gray-600 text-sm font-bold rounded-xl hover:bg-gray-50 hover:text-gray-900 transition">
-                Batal
+               class="px-5 py-2.5 bg-white border border-gray-200 text-gray-600 text-sm font-bold rounded-xl hover:bg-gray-50 hover:text-gray-900 transition flex items-center gap-2">
+                <i class="fas fa-arrow-left text-xs"></i> Batal
             </a>
             <button type="submit"
                 class="inline-flex items-center gap-2 bg-evergreen-600 hover:bg-evergreen-700 text-white text-sm font-bold px-6 py-2.5 rounded-xl transition shadow-sm hover:shadow-md">
