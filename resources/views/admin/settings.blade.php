@@ -194,6 +194,7 @@
                             </td>
                             <td class="px-6 py-3.5 font-mono text-xs text-gray-500">{{ $staff->username }}</td>
                             <td class="px-6 py-3.5 text-xs text-gray-500 hidden sm:table-cell">{{ $staff->email ?? '—' }}
+
                             </td>
                             <td class="px-6 py-3.5">
                                 <div class="flex items-center justify-end gap-1.5">

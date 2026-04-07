@@ -43,9 +43,9 @@
             </button>
 
             <div id="sa-profile-dropdown" class="hidden absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
-                <a href="{{ route('superadmin.settings') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition">
+                {{-- <a href="{{ route('superadmin.settings') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"> --}}
                     <i class="fas fa-cog w-4 text-gray-400"></i> Pengaturan
-                </a>
+                {{-- </a> --}}
                 <div class="border-t border-gray-100">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

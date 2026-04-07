@@ -1,4 +1,4 @@
-{{-- NAVBAR ADMIN SMK --}}
+{{-- NAVBAR ADMIN --}}
 <header class="flex items-center justify-between h-16 px-6 bg-white border-b border-gray-200 flex-shrink-0">
 
     {{-- Left: Hamburger + Page Title --}}

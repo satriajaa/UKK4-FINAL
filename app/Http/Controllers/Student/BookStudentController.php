@@ -7,8 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Borrowing;
 use App\Models\Category;
-use App\Models\Wishlist;
+use App\Models\Review;
 use App\Models\Setting;
+use App\Models\Wishlist;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -150,5 +151,37 @@ class BookStudentController extends Controller
         }
 
         return back()->with('success', "Permintaan peminjaman \"$book->title\" berhasil dikirim! Tunggu persetujuan pustakawan.");
+    }
+
+    /**
+     * Menyimpan ulasan buku dari siswa
+     */
+    public function storeReview(Request $request, Book $book)
+    {
+        // Validasi input
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
+        ], [
+            'rating.required' => 'Wajib memberikan bintang penilaian.',
+            'rating.min' => 'Minimal rating 1 bintang.',
+            'rating.max' => 'Maksimal rating 5 bintang.'
+        ]);
+
+        // Simpan atau update ulasan (agar 1 user cuma bisa review 1 kali per buku)
+        Review::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'book_id' => $book->id,
+                'school_id' => auth()->user()->school_id,
+            ],
+            [
+                'rating' => $request->rating,
+                'comment' => $request->comment,
+            ]
+        );
+
+        // Redirect kembali ke halaman detail buku
+        return back()->with('success', 'Ulasan kamu berhasil dikirim!');
     }
 }

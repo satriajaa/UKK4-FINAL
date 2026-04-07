@@ -11,41 +11,52 @@
 @section('content')
 
     {{-- ── Header Row ───────────────────────────────────────── --}}
-    <div class="flex items-center justify-between mb-5">
-        <div>
+    {{-- <div class="flex items-center justify-between mb-5"> --}}
+    {{-- <div>
             <h2 class="text-xl font-bold text-gray-900">Kelola Anggota</h2>
             <p class="text-sm text-gray-500 mt-0.5">Daftar lengkap siswa dan guru yang terdaftar di sistem Ruang Baca.</p>
+        </div> --}}
+    {{-- <button onclick="openModal('modal-add-member')"
+            class="flex items-center gap-2 bg-evergreen-600 hover:bg-evergreen-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition">
+            <i class="fas fa-user-plus"></i> Tambah Anggota
+        </button> --}}
+    {{-- </div> --}}
+
+    {{-- ── Status Tabs ──────────────────────────────────────── --}}
+    <div class="flex mb-5 flex-wrap justify-between items-center gap-4">
+        {{-- Bungkus menu status dalam satu div agar nempel ke kiri --}}
+        <div class="flex gap-2 flex-wrap">
+            @php
+                $statuses = [
+                    '' => ['label' => 'Semua', 'count' => $counts['all'], 'color' => 'gray'],
+                    'approved' => ['label' => 'Aktif', 'count' => $counts['approved'], 'color' => 'green'],
+                    'pending' => ['label' => 'Menunggu', 'count' => $counts['pending'], 'color' => 'amber'],
+                    'rejected' => ['label' => 'Ditolak', 'count' => $counts['rejected'], 'color' => 'red'],
+                ];
+                $currentStatus = request('status', '');
+            @endphp
+
+            @foreach ($statuses as $val => $s)
+                <a href="{{ route('admin.members.index', array_merge(request()->except('status', 'page'), $val ? ['status' => $val] : [])) }}"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border transition
+              {{ $currentStatus === $val
+                  ? 'bg-gray-900 text-white border-gray-900'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400' }}">
+                    {{ $s['label'] }}
+                    <span
+                        class="text-xs px-1.5 py-0.5 rounded-full
+                    {{ $currentStatus === $val ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500' }}">
+                        {{ $s['count'] }}
+                    </span>
+                </a>
+            @endforeach
         </div>
+
+        {{-- Tombol ini otomatis akan terdorong ke paling kanan karena justify-between di parent --}}
         <button onclick="openModal('modal-add-member')"
             class="flex items-center gap-2 bg-evergreen-600 hover:bg-evergreen-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition">
             <i class="fas fa-user-plus"></i> Tambah Anggota
         </button>
-    </div>
-
-    {{-- ── Status Tabs ──────────────────────────────────────── --}}
-    <div class="flex gap-2 mb-5 flex-wrap">
-        @php
-            $statuses = [
-                '' => ['label' => 'Semua', 'count' => $counts['all'], 'color' => 'gray'],
-                'approved' => ['label' => 'Aktif', 'count' => $counts['approved'], 'color' => 'green'],
-                'pending' => ['label' => 'Menunggu', 'count' => $counts['pending'], 'color' => 'amber'],
-                'rejected' => ['label' => 'Ditolak', 'count' => $counts['rejected'], 'color' => 'red'],
-            ];
-            $currentStatus = request('status', '');
-        @endphp
-        @foreach ($statuses as $val => $s)
-            <a href="{{ route('admin.members.index', array_merge(request()->except('status', 'page'), $val ? ['status' => $val] : [])) }}"
-                class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border transition
-              {{ $currentStatus === $val
-                  ? 'bg-gray-900 text-white border-gray-900'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400' }}">
-                {{ $s['label'] }}
-                <span class="text-xs px-1.5 py-0.5 rounded-full
-                    {{ $currentStatus === $val ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500' }}">
-                    {{ $s['count'] }}
-                </span>
-            </a>
-        @endforeach
     </div>
 
     {{-- ── Search & Filter ─────────────────────────────────── --}}
@@ -63,7 +74,7 @@
             <select name="class_id" onchange="this.form.submit()"
                 class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-600 focus:ring-2 focus:ring-evergreen-500 outline-none cursor-pointer min-w-[160px]">
                 <option value="">Semua Kelas</option>
-                @foreach(\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->get() as $cls)
+                @foreach (\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->get() as $cls)
                     <option value="{{ $cls->id }}" {{ request('class_id') == $cls->id ? 'selected' : '' }}>
                         {{ $cls->name }}
                     </option>
@@ -82,7 +93,8 @@
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                    <tr
+                        class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
                         <th class="px-4 py-3 text-left w-10">No</th>
                         <th class="px-4 py-3 text-left">Nama Lengkap</th>
                         <th class="px-4 py-3 text-left">Username</th>
@@ -111,19 +123,24 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3.5 text-gray-600 font-mono text-xs">{{ $member->username }}</td>
-                            <td class="px-4 py-3.5 text-gray-500 text-xs hidden md:table-cell">{{ $member->email ?? '—' }}</td>
+                            <td class="px-4 py-3.5 text-gray-500 text-xs hidden md:table-cell">{{ $member->email ?? '—' }}
+                            </td>
                             <td class="px-4 py-3.5">
                                 <span class="text-xs font-medium text-gray-700">{{ $member->class->name ?? '—' }}</span>
                             </td>
                             <td class="px-4 py-3.5">
                                 @if ($member->status === 'approved')
-                                    <span class="inline-flex items-center gap-1 bg-evergreen-100 text-evergreen-700 text-xs font-bold px-2.5 py-1 rounded-full">AKTIF</span>
+                                    <span
+                                        class="inline-flex items-center gap-1 bg-evergreen-100 text-evergreen-700 text-xs font-bold px-2.5 py-1 rounded-full">AKTIF</span>
                                 @elseif($member->status === 'pending')
-                                    <span class="inline-flex items-center gap-1 bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-1 rounded-full">MENUNGGU</span>
+                                    <span
+                                        class="inline-flex items-center gap-1 bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-1 rounded-full">MENUNGGU</span>
                                 @elseif($member->status === 'rejected')
-                                    <span class="inline-flex items-center gap-1 bg-red-100 text-red-700 text-xs font-bold px-2.5 py-1 rounded-full">DITOLAK</span>
+                                    <span
+                                        class="inline-flex items-center gap-1 bg-red-100 text-red-700 text-xs font-bold px-2.5 py-1 rounded-full">DITOLAK</span>
                                 @else
-                                    <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">{{ strtoupper($member->status) }}</span>
+                                    <span
+                                        class="inline-flex items-center gap-1 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">{{ strtoupper($member->status) }}</span>
                                 @endif
                             </td>
                             <td class="px-4 py-3.5">
@@ -168,7 +185,8 @@
 
         {{-- Pagination --}}
         @if ($members->hasPages() || $members->total() > 0)
-            <div class="px-6 py-5 border-t border-gray-100 flex items-center justify-between flex-wrap gap-4 bg-white rounded-b-2xl">
+            <div
+                class="px-6 py-5 border-t border-gray-100 flex items-center justify-between flex-wrap gap-4 bg-white rounded-b-2xl">
                 <p class="text-sm text-gray-500">
                     Menampilkan <span class="font-semibold text-gray-900">{{ $members->firstItem() ?? 0 }}</span>
                     hingga <span class="font-semibold text-gray-900">{{ $members->lastItem() ?? 0 }}</span>
@@ -176,7 +194,8 @@
                 </p>
                 <div class="flex items-center gap-1.5">
                     @if ($members->onFirstPage())
-                        <span class="w-9 h-9 flex items-center justify-center text-gray-300 bg-gray-50 rounded-lg cursor-not-allowed">
+                        <span
+                            class="w-9 h-9 flex items-center justify-center text-gray-300 bg-gray-50 rounded-lg cursor-not-allowed">
                             <i class="fas fa-chevron-left text-xs"></i>
                         </span>
                     @else
@@ -188,7 +207,8 @@
 
                     @foreach ($members->getUrlRange(max(1, $members->currentPage() - 2), min($members->lastPage(), $members->currentPage() + 2)) as $page => $url)
                         @if ($page == $members->currentPage())
-                            <span class="w-9 h-9 flex items-center justify-center bg-evergreen-600 text-white rounded-lg text-sm font-bold shadow-md shadow-evergreen-200">
+                            <span
+                                class="w-9 h-9 flex items-center justify-center bg-evergreen-600 text-white rounded-lg text-sm font-bold shadow-md shadow-evergreen-200">
                                 {{ $page }}
                             </span>
                         @else
@@ -205,7 +225,8 @@
                             <i class="fas fa-chevron-right text-xs"></i>
                         </a>
                     @else
-                        <span class="w-9 h-9 flex items-center justify-center text-gray-300 bg-gray-50 rounded-lg cursor-not-allowed">
+                        <span
+                            class="w-9 h-9 flex items-center justify-center text-gray-300 bg-gray-50 rounded-lg cursor-not-allowed">
                             <i class="fas fa-chevron-right text-xs"></i>
                         </span>
                     @endif
@@ -218,7 +239,8 @@
     <div class="mt-4 flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 text-sm text-blue-700">
         <i class="fas fa-info-circle mt-0.5 text-blue-400 flex-shrink-0"></i>
         <p>Akun dengan status <strong>Menunggu</strong> tidak dapat login sampai disetujui oleh admin. Klik tombol
-            <strong>✓</strong> untuk menyetujui.</p>
+            <strong>✓</strong> untuk menyetujui.
+        </p>
     </div>
 
     {{-- ════════════ MODAL: TAMBAH ANGGOTA ════════════ --}}
@@ -234,13 +256,15 @@
             <form method="POST" action="{{ route('admin.members.store') }}" class="px-6 py-5 space-y-4">
                 @csrf
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap <span
+                            class="text-red-500">*</span></label>
                     <input type="text" name="full_name" required placeholder="Nama lengkap siswa"
                         class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Username <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Username <span
+                                class="text-red-500">*</span></label>
                         <input type="text" name="username" required placeholder="username unik"
                             class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
                     </div>
@@ -256,17 +280,21 @@
                         class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kelas <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kelas <span
+                            class="text-red-500">*</span></label>
                     <select name="class_id" required
                         class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
                         <option value="">Pilih Kelas</option>
-                        @foreach (\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->get() as $cls)
+
+                        {{-- Tambahkan filter whereNotIn untuk menyembunyikan template --}}
+                        @foreach (\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->whereNotIn('name', ['__level_template__', '__major_template__'])->orderBy('name', 'asc')->get() as $cls)
                             <option value="{{ $cls->id }}">{{ $cls->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password <span
+                            class="text-red-500">*</span></label>
                     <input type="password" name="password" required placeholder="Min. 8 karakter"
                         class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
                 </div>
@@ -274,7 +302,8 @@
                     <button type="button" onclick="closeModal('modal-add-member')"
                         class="flex-1 py-2.5 border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition text-sm">Batal</button>
                     <button type="submit"
-                        class="flex-[2] py-2.5 bg-evergreen-600 hover:bg-evergreen-700 text-white font-bold rounded-xl transition text-sm">Simpan Anggota</button>
+                        class="flex-[2] py-2.5 bg-evergreen-600 hover:bg-evergreen-700 text-white font-bold rounded-xl transition text-sm">Simpan
+                        Anggota</button>
                 </div>
             </form>
         </div>
@@ -336,7 +365,8 @@
                     <button type="button" onclick="closeModal('modal-edit-member')"
                         class="flex-1 py-2.5 border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition text-sm">Batal</button>
                     <button type="submit"
-                        class="flex-[2] py-2.5 bg-evergreen-600 hover:bg-evergreen-700 text-white font-bold rounded-xl transition text-sm">Simpan Perubahan</button>
+                        class="flex-[2] py-2.5 bg-evergreen-600 hover:bg-evergreen-700 text-white font-bold rounded-xl transition text-sm">Simpan
+                        Perubahan</button>
                 </div>
             </form>
         </div>
@@ -345,23 +375,30 @@
 @endsection
 
 @push('scripts')
-<script>
-    function openModal(id)  { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
 
-    document.querySelectorAll('[id^="modal-"]').forEach(m => {
-        m.addEventListener('click', e => { if (e.target === m) m.classList.add('hidden'); });
-    });
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
 
-    function openEditMember(member) {
-        document.getElementById('edit-full-name').value  = member.full_name  || '';
-        document.getElementById('edit-username').value   = member.username   || '';
-        document.getElementById('edit-student-id').value = member.student_id || '';
-        document.getElementById('edit-email').value      = member.email      || '';
-        document.getElementById('edit-class-id').value   = member.class_id   || '';
-        document.getElementById('edit-status').value     = member.status     || 'pending';
-        document.getElementById('form-edit-member').action = `/admin/members/${member.id}`;
-        openModal('modal-edit-member');
-    }
-</script>
+        document.querySelectorAll('[id^="modal-"]').forEach(m => {
+            m.addEventListener('click', e => {
+                if (e.target === m) m.classList.add('hidden');
+            });
+        });
+
+        function openEditMember(member) {
+            document.getElementById('edit-full-name').value = member.full_name || '';
+            document.getElementById('edit-username').value = member.username || '';
+            document.getElementById('edit-student-id').value = member.student_id || '';
+            document.getElementById('edit-email').value = member.email || '';
+            document.getElementById('edit-class-id').value = member.class_id || '';
+            document.getElementById('edit-status').value = member.status || 'pending';
+            document.getElementById('form-edit-member').action = `/admin/members/${member.id}`;
+            openModal('modal-edit-member');
+        }
+    </script>
 @endpush

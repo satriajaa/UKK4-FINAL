@@ -25,7 +25,7 @@
             Dashboard
         </a>
 
-        <a href="{{ route('superadmin.schools.index') }}"
+        {{-- <a href="{{ route('superadmin.schools.index') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
                   {{ request()->routeIs('superadmin.schools.*') ? 'bg-indigo-600/20 text-indigo-400' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
             <i class="fas fa-school w-4 text-center {{ request()->routeIs('superadmin.schools.*') ? 'text-indigo-400' : 'text-slate-500' }}"></i>
@@ -37,23 +37,23 @@
                   {{ request()->routeIs('superadmin.users.*') ? 'bg-indigo-600/20 text-indigo-400' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
             <i class="fas fa-users-cog w-4 text-center {{ request()->routeIs('superadmin.users.*') ? 'text-indigo-400' : 'text-slate-500' }}"></i>
             Kelola Pengguna
-        </a>
+        </a> --}}
 
-        <a href="{{ route('superadmin.analytics') }}"
+        {{-- <a href="{{ route('superadmin.analytics') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
                   {{ request()->routeIs('superadmin.analytics') ? 'bg-indigo-600/20 text-indigo-400' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
             <i class="fas fa-chart-line w-4 text-center {{ request()->routeIs('superadmin.analytics') ? 'text-indigo-400' : 'text-slate-500' }}"></i>
             Analitik
-        </a>
+        </a> --}}
 
         <p class="px-3 pt-4 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-widest">Konfigurasi</p>
 
-        <a href="{{ route('superadmin.settings') }}"
+        {{-- <a href="{{ route('superadmin.settings') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
                   {{ request()->routeIs('superadmin.settings') ? 'bg-indigo-600/20 text-indigo-400' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
             <i class="fas fa-sliders-h w-4 text-center {{ request()->routeIs('superadmin.settings') ? 'text-indigo-400' : 'text-slate-500' }}"></i>
             Pengaturan Sistem
-        </a>
+        </a> --}}
     </nav>
 
     {{-- User + Logout --}}
@@ -75,4 +75,4 @@
             </button>
         </form>
     </div>
-</aside>    
+</aside>

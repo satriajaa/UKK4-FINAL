@@ -16,12 +16,12 @@ class RegisterController extends Controller
     /**
      * Show registration form
      */
-    public function showRegistrationForm()
+public function showRegistrationForm()
     {
         $schools = School::where('status', 'active')->get();
-        $classes = ClassModel::all(); // Akan di-filter berdasarkan sekolah via AJAX
 
-        return view('auth.register', compact('schools', 'classes'));
+        // Hapus ClassModel::all(), kirim schools aja
+        return view('auth.register', compact('schools'));
     }
 
     /**

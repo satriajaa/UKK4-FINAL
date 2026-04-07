@@ -558,28 +558,28 @@ $dueDate = now()->addDays($maxDays)->format('d M Y');
                 <button onclick="document.getElementById('review-modal').classList.replace('flex','hidden')"
                     class="text-gray-400 hover:text-gray-600 transition"><i class="fas fa-times"></i></button>
             </div>
-            <form method="POST" action="{{ route('student.books.index') }}" class="px-6 py-5">
-                @csrf
-                <input type="hidden" name="book_id" value="{{ $book->id }}">
-                <p class="text-sm text-gray-500 mb-4">Berikan penilaian untuk <strong>{{ $book->title }}</strong></p>
+            <form method="POST" action="{{ route('student.books.review', $book->id) }}" class="px-6 py-5">
+    @csrf
+    <p class="text-sm text-gray-500 mb-4">Berikan penilaian untuk <strong>{{ $book->title }}</strong></p>
 
-                {{-- Star picker --}}
-                <div class="flex justify-center gap-2 mb-4" id="star-picker">
-                    @for ($s = 1; $s <= 5; $s++)
-                        <button type="button" data-star="{{ $s }}" onclick="setRating({{ $s }})"
-                            class="text-2xl text-gray-200 hover:text-yellow-400 transition">★</button>
-                    @endfor
-                </div>
-                <input type="hidden" name="rating" id="rating-val" value="">
+    {{-- Star picker --}}
+    <div class="flex justify-center gap-2 mb-4" id="star-picker">
+        @for ($s = 1; $s <= 5; $s++)
+            <button type="button" data-star="{{ $s }}" onclick="setRating({{ $s }})"
+                class="text-2xl text-gray-200 hover:text-yellow-400 transition">★</button>
+        @endfor
+    </div>
 
-                <textarea name="comment" rows="3" placeholder="Ceritakan pendapatmu tentang buku ini..."
-                    class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-evergreen-500 resize-none mb-4"></textarea>
+    <input type="hidden" name="rating" id="rating-val" value="" required>
 
-                <button type="submit"
-                    class="w-full bg-evergreen-600 hover:bg-evergreen-700 text-white text-sm font-bold py-2.5 rounded-xl transition">
-                    Kirim Ulasan
-                </button>
-            </form>
+    <textarea name="comment" rows="3" placeholder="Ceritakan pendapatmu tentang buku ini..."
+        class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-evergreen-500 resize-none mb-4"></textarea>
+
+    <button type="submit"
+        class="w-full bg-evergreen-600 hover:bg-evergreen-700 text-white text-sm font-bold py-2.5 rounded-xl transition">
+        Kirim Ulasan
+    </button>
+</form>
         </div>
     </div>
 

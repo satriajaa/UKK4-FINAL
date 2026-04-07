@@ -20,10 +20,18 @@
 
                 {{-- Logo --}}
                 <a href="{{ route('student.dashboard') }}" class="flex items-center gap-2.5 flex-shrink-0 mr-8">
+
+                    {{-- Kotak Hijau --}}
                     <div class="w-8 h-8 bg-evergreen-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-book-open text-white text-sm"></i>
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-5 h-5 object-contain">
                     </div>
-                    <span class="font-bold text-gray-900 text-sm tracking-wide hidden sm:block">RUANG BACA</span>
+
+                    {{-- Text --}}
+                    <div class="leading-tight hidden sm:block">
+                        <div class="font-bold text-gray-900 text-sm tracking-wide">RUANG</div>
+                        <div class="font-bold text-gray-900 text-sm tracking-wide">BACA</div>
+                    </div>
+
                 </a>
 
                 {{-- Desktop Nav Links --}}

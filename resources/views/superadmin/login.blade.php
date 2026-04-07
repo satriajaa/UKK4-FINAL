@@ -17,7 +17,7 @@
 
     <div class="min-h-screen flex items-center justify-center p-4 relative z-10">
         <div class="w-full max-w-md">
-            
+
             <!-- Logo & Badge -->
             <div class="text-center mb-8">
                 <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-evergreen-500 to-evergreen-700 rounded-2xl shadow-2xl mb-6 animate-pulse">
@@ -49,7 +49,7 @@
 
             <!-- Login Card -->
             <div class="bg-gray-800/50 backdrop-blur-xl border border-gray-700 rounded-2xl shadow-2xl p-8">
-                
+
                 <!-- Warning Banner -->
                 <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-6">
                     <div class="flex items-start text-yellow-400 text-sm">
@@ -68,10 +68,10 @@
                             <i class="fas fa-user-shield mr-2"></i>Username Superadmin
                         </label>
                         <div class="relative">
-                            <input 
-                                type="text" 
-                                id="username" 
-                                name="username" 
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
                                 value="{{ old('username') }}"
                                 placeholder="Masukkan username superadmin"
                                 class="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-evergreen-500 focus:border-transparent transition placeholder-gray-500 @error('username') border-red-500 @enderror"
@@ -87,16 +87,16 @@
                             <i class="fas fa-key mr-2"></i>Kata Sandi
                         </label>
                         <div class="relative">
-                            <input 
-                                type="password" 
-                                id="password" 
-                                name="password" 
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
                                 placeholder="••••••••••••"
                                 class="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-evergreen-500 focus:border-transparent transition placeholder-gray-500 @error('password') border-red-500 @enderror"
                                 required
                             >
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 onclick="togglePassword()"
                                 class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-300"
                             >
@@ -108,9 +108,9 @@
                     <!-- Remember Me -->
                     <div class="flex items-center justify-between">
                         <label class="flex items-center">
-                            <input 
-                                type="checkbox" 
-                                id="remember" 
+                            <input
+                                type="checkbox"
+                                id="remember"
                                 name="remember"
                                 class="w-4 h-4 text-evergreen-600 bg-gray-900 border-gray-600 rounded focus:ring-evergreen-500"
                             >
@@ -119,7 +119,7 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <button 
+                    <button
                         type="submit"
                         class="w-full py-4 px-4 bg-gradient-to-r from-evergreen-600 to-evergreen-700 text-white rounded-lg font-bold hover:shadow-xl hover:shadow-evergreen-500/50 hover:scale-[1.02] transition duration-300 flex items-center justify-center space-x-2 uppercase tracking-wider"
                     >
@@ -141,11 +141,11 @@
             <div class="mt-8 text-center">
                 <p class="text-gray-500 text-sm mb-2">Sistem Manajemen Perpustakaan Digital</p>
                 <div class="flex items-center justify-center space-x-4 text-xs text-gray-600">
-                    <span>&copy; 2024 Ruang Baca</span>
+                    <span>&copy; 2026 Ruang Baca</span>
                     <span>•</span>
-                    <span class="text-evergreen-400">Versi 2.4.0</span>
+                    {{-- <span class="text-evergreen-400">Versi 2.4.0</span> --}}
                     <span>•</span>
-                    <span>Build 20240212</span>
+                    <span>Build 20260105</span>
                 </div>
             </div>
 
@@ -163,7 +163,7 @@
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const toggleIcon = document.getElementById('toggleIcon');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleIcon.classList.remove('fa-eye');

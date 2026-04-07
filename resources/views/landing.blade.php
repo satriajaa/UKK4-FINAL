@@ -1,377 +1,4 @@
-{{-- <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruang Baca - Digital Library Multi-School</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-white text-gray-900">
 
-    <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <a href="{{ route('landing') }}" class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-gradient-to-br from-evergreen-500 to-evergreen-700 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-book-open text-white text-xl"></i>
-                    </div>
-                    <span class="text-xl font-bold">
-                        <span class="text-gray-900">RUANG</span>
-                        <span class="text-evergreen-600">BACA</span>
-                    </span>
-                </a>
-
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#beranda" class="text-gray-700 hover:text-evergreen-600 transition">Beranda</a>
-                    <a href="#fitur" class="text-gray-700 hover:text-evergreen-600 transition">Fitur</a>
-                    <a href="#kategori" class="text-gray-700 hover:text-evergreen-600 transition">Kategori</a>
-                    <a href="#kontak" class="text-gray-700 hover:text-evergreen-600 transition">Kontak</a>
-                </div>
-
-                <!-- CTA Button -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="{{ route('login') }}" class="px-6 py-2.5 bg-gradient-to-r from-evergreen-500 to-evergreen-600 text-white rounded-lg hover:shadow-lg transition duration-300 font-medium">
-                        Masuk Pustaka
-                    </a>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
-            <div class="px-4 py-4 space-y-4">
-                <a href="#beranda" class="block text-gray-700 hover:text-evergreen-600">Beranda</a>
-                <a href="#fitur" class="block text-gray-700 hover:text-evergreen-600">Fitur</a>
-                <a href="#kategori" class="block text-gray-700 hover:text-evergreen-600">Kategori</a>
-                <a href="#kontak" class="block text-gray-700 hover:text-evergreen-600">Kontak</a>
-                <a href="{{ route('login') }}" class="block w-full px-6 py-2.5 bg-gradient-to-r from-evergreen-500 to-evergreen-600 text-white text-center rounded-lg">
-                    Masuk Pustaka
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="beranda" class="pt-24 pb-16 bg-gradient-to-br from-evergreen-50 via-white to-evergreen-50 overflow-hidden">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <!-- Left: Text Content -->
-                <div class="space-y-6">
-                    <div class="inline-block px-4 py-2 bg-evergreen-100 text-evergreen-800 rounded-full text-sm font-medium">
-                        <i class="fas fa-graduation-cap mr-2"></i>
-                        Sistem Manajemen Perpustakaan
-                    </div>
-
-                    <h1 class="text-5xl md:text-6xl font-bold leading-tight">
-                        Unlock Your <br>
-                        <span class="text-evergreen-600">Potential</span> through <br>
-                        Reading.
-                    </h1>
-
-                    <p class="text-gray-600 text-lg max-w-xl">
-                        Sistem perpustakaan digital terpadu untuk sekolah modern. Memberdayakan siswa dan pendidik dengan akses mudah ke ribuan koleksi buku.
-                    </p>
-
-                    <div class="flex flex-wrap gap-4">
-                        <a href="{{ route('login') }}" class="px-8 py-4 bg-gradient-to-r from-evergreen-500 to-evergreen-600 text-white rounded-lg hover:shadow-xl transition duration-300 font-medium">
-                            Cari Buku Sekarang
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                        <a href="#fitur" class="px-8 py-4 bg-white border-2 border-evergreen-600 text-evergreen-600 rounded-lg hover:bg-evergreen-50 transition duration-300 font-medium">
-                            Pelajari Fitur
-                        </a>
-                    </div>
-
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-6 pt-8">
-                        <div>
-                            <div class="text-3xl font-bold text-evergreen-600">{{ number_format($total_books) }}+</div>
-                            <div class="text-sm text-gray-600">Total Buku</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold text-evergreen-600">{{ number_format($total_students) }}+</div>
-                            <div class="text-sm text-gray-600">Anggota Aktif</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold text-evergreen-600">{{ $total_schools }}+</div>
-                            <div class="text-sm text-gray-600">Sekolah</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: Image with Books -->
-                <div class="relative">
-                    <div class="relative">
-                        <!-- Background Shape -->
-                        <div class="absolute inset-0 bg-gradient-to-br from-evergreen-400 to-evergreen-600 rounded-[3rem] transform rotate-6"></div>
-
-                        <!-- Main Image Container -->
-                        <div class="relative bg-gradient-to-br from-amber-200 to-amber-400 rounded-[3rem] p-8 shadow-2xl">
-                            <div class="aspect-square flex items-end justify-center">
-                                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600"
-                                     alt="Stack of Books"
-                                     class="w-full h-full object-contain drop-shadow-2xl">
-                            </div>
-                        </div>
-
-                        <!-- Active Members Badge -->
-                        <div class="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl p-4 flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-evergreen-400 to-evergreen-600 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-users text-white text-xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-xs text-gray-500 uppercase tracking-wide">Active Members</div>
-                                <div class="text-xl font-bold text-gray-900">{{ number_format($total_students) }}+</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Floating Elements -->
-                    <div class="absolute top-10 -right-10 w-20 h-20 bg-evergreen-200 rounded-full animate-bounce"></div>
-                    <div class="absolute -top-5 left-10 w-16 h-16 bg-evergreen-300 rounded-lg animate-pulse"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="fitur" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Kenapa Memilih <span class="text-evergreen-600">RUANG BACA</span>?</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
-                    Solusi perpustakaan terlengkap untuk meningkatkan minat baca dan kemudahan akses ilmu pengetahuan.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="p-8 bg-gradient-to-br from-evergreen-50 to-white rounded-2xl hover:shadow-xl transition duration-300 border border-evergreen-100">
-                    <div class="w-16 h-16 bg-gradient-to-br from-evergreen-500 to-evergreen-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-book text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Katalog Digital</h3>
-                    <p class="text-gray-600">
-                        Sistem scan barcode otomatis untuk peminjaman dan pengembalian buku tanpa harus keliling rak.
-                    </p>
-                </div>
-
-                <!-- Feature 2 -->
-                <div class="p-8 bg-gradient-to-br from-evergreen-50 to-white rounded-2xl hover:shadow-xl transition duration-300 border border-evergreen-100">
-                    <div class="w-16 h-16 bg-gradient-to-br from-evergreen-500 to-evergreen-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-bolt text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Peminjaman Cepat</h3>
-                    <p class="text-gray-600">
-                        Akses e-book dan materi digital dapat diakses kapan saja dan di mana saja oleh seluruh warga sekolah.
-                    </p>
-                </div>
-
-                <!-- Feature 3 -->
-                <div class="p-8 bg-gradient-to-br from-evergreen-50 to-white rounded-2xl hover:shadow-xl transition duration-300 border border-evergreen-100">
-                    <div class="w-16 h-16 bg-gradient-to-br from-evergreen-500 to-evergreen-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-bell text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Notifikasi Pengembalian</h3>
-                    <p class="text-gray-600">
-                        Pantau statistik peminjaman, buku paling populer, dan kebutuhan inventaris secara real-time.
-                    </p>
-                </div>
-
-                <!-- Feature 4 -->
-                <div class="p-8 bg-gradient-to-br from-evergreen-50 to-white rounded-2xl hover:shadow-xl transition duration-300 border border-evergreen-100">
-                    <div class="w-16 h-16 bg-gradient-to-br from-evergreen-500 to-evergreen-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-mobile-alt text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">E-Book Access</h3>
-                    <p class="text-gray-600">
-                        Baca buku digital di mana saja melalui platform yang responsif dan user-friendly.
-                    </p>
-                </div>
-
-                <!-- Feature 5 -->
-                <div class="p-8 bg-gradient-to-br from-evergreen-50 to-white rounded-2xl hover:shadow-xl transition duration-300 border border-evergreen-100">
-                    <div class="w-16 h-16 bg-gradient-to-br from-evergreen-500 to-evergreen-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-chart-line text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Riwayat Baca</h3>
-                    <p class="text-gray-600">
-                        Lacak buku apa saja yang sudah dibaca dan dapatkan rekomendasi personal.
-                    </p>
-                </div>
-
-                <!-- Feature 6 -->
-                <div class="p-8 bg-gradient-to-br from-evergreen-50 to-white rounded-2xl hover:shadow-xl transition duration-300 border border-evergreen-100">
-                    <div class="w-16 h-16 bg-gradient-to-br from-evergreen-500 to-evergreen-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-lightbulb text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Request Buku</h3>
-                    <p class="text-gray-600">
-                        Usulkan buku baru ke admin untuk menambah koleksi perpustakaan sekolah.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories Section -->
-    <section id="kategori" class="py-20 bg-gradient-to-br from-evergreen-50 to-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Kategori <span class="text-evergreen-600">Populer</span></h2>
-                <p class="text-gray-600">Jelajahi berbagai kategori buku yang tersedia</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Category 1 -->
-                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border-t-4 border-evergreen-500">
-                    <div class="text-center">
-                        <i class="fas fa-book-reader text-5xl text-evergreen-600 mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-3">Buku Pelajaran</h3>
-                        <p class="text-gray-600 mb-6">Modul, LKS, dan buku referensi akademik</p>
-                        <a href="{{ route('login') }}" class="inline-block px-6 py-3 bg-evergreen-100 text-evergreen-700 rounded-lg hover:bg-evergreen-200 transition">
-                            Lihat Koleksi
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Category 2 - Featured -->
-                <div class="bg-gradient-to-br from-evergreen-600 to-evergreen-700 rounded-2xl p-8 shadow-2xl transform md:-translate-y-4">
-                    <div class="text-center text-white">
-                        <i class="fas fa-star text-5xl mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-3">Novel & Fiksi</h3>
-                        <p class="text-evergreen-100 mb-6">Best Seller minggu ini</p>
-                        <a href="{{ route('login') }}" class="inline-block px-6 py-3 bg-white text-evergreen-700 rounded-lg hover:bg-evergreen-50 transition font-medium">
-                            Lihat Koleksi
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Category 3 -->
-                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border-t-4 border-evergreen-500">
-                    <div class="text-center">
-                        <i class="fas fa-flask text-5xl text-evergreen-600 mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-3">Ensiklopedia & Sains</h3>
-                        <p class="text-gray-600 mb-6">Buku pengetahuan dan referensi</p>
-                        <a href="{{ route('login') }}" class="inline-block px-6 py-3 bg-evergreen-100 text-evergreen-700 rounded-lg hover:bg-evergreen-200 transition">
-                            Lihat Koleksi
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-r from-evergreen-700 to-evergreen-800 text-white">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                Siap Modernisasi <br> Perpustakaan Sekolah Anda?
-            </h2>
-            <p class="text-xl text-evergreen-100 mb-8 max-w-2xl mx-auto">
-                Bergabunglah dengan ratusan sekolah lainnya dan rasakan kemudahan mengelola literasi masa depan.
-            </p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="{{ route('login') }}" class="px-8 py-4 bg-white text-evergreen-700 rounded-lg hover:bg-evergreen-50 transition duration-300 font-medium shadow-lg">
-                    Coba Demo Gratis
-                </a>
-                <a href="#kontak" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white hover:text-evergreen-700 transition duration-300 font-medium">
-                    Hubungi Tim Penjualan
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="kontak" class="bg-gray-900 text-gray-300 py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <!-- Company Info -->
-                <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <div class="w-10 h-10 bg-gradient-to-br from-evergreen-500 to-evergreen-700 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-book-open text-white"></i>
-                        </div>
-                        <span class="text-xl font-bold text-white">RUANG BACA</span>
-                    </div>
-                    <p class="text-sm text-gray-400">
-                        Partner terpercaya dalam digitalisasi perpustakaan sekolah di Indonesia.
-                    </p>
-                </div>
-
-                <!-- Layanan -->
-                <div>
-                    <h3 class="text-white font-bold mb-4">LAYANAN</h3>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-evergreen-500 transition">E-Library</a></li>
-                        <li><a href="#" class="hover:text-evergreen-500 transition">Sistem Inventaris</a></li>
-                        <li><a href="#" class="hover:text-evergreen-500 transition">Manajemen Member</a></li>
-                        <li><a href="#" class="hover:text-evergreen-500 transition">Katalog Digital</a></li>
-                    </ul>
-                </div>
-
-                <!-- Perusahaan -->
-                <div>
-                    <h3 class="text-white font-bold mb-4">PERUSAHAAN</h3>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-evergreen-500 transition">Tentang Kami</a></li>
-                        <li><a href="#" class="hover:text-evergreen-500 transition">Karir</a></li>
-                        <li><a href="#" class="hover:text-evergreen-500 transition">Blog & Artikel</a></li>
-                        <li><a href="#" class="hover:text-evergreen-500 transition">Kebijakan Privasi</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact -->
-                <div>
-                    <h3 class="text-white font-bold mb-4">KONTAK KAMI</h3>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex items-start">
-                            <i class="fas fa-map-marker-alt text-evergreen-500 mr-3 mt-1"></i>
-                            <span>Gedung Literasi Lt. 4, Jakarta Selatan</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-phone text-evergreen-500 mr-3"></i>
-                            <span>+62 812-3456-7890</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-envelope text-evergreen-500 mr-3"></i>
-                            <span>hello@ruangbaca.com</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Bottom Footer -->
-            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-sm text-gray-500">&copy; 2024 RUANG BACA. All rights reserved. Version 2.4.0</p>
-                <div class="flex space-x-4 mt-4 md:mt-0">
-                    <a href="#" class="text-gray-500 hover:text-evergreen-500 transition"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-gray-500 hover:text-evergreen-500 transition"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-gray-500 hover:text-evergreen-500 transition"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-gray-500 hover:text-evergreen-500 transition"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        }
-    </script>
-
-</body>
-</html> --}}
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 
@@ -382,7 +9,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -410,7 +39,9 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             font-family: 'Playfair Display', serif;
         }
 
@@ -606,9 +237,19 @@
         }
 
         @keyframes blobFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(20px, -30px) scale(1.05); }
-            66% { transform: translate(-15px, 20px) scale(0.95); }
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(20px, -30px) scale(1.05);
+            }
+
+            66% {
+                transform: translate(-15px, 20px) scale(0.95);
+            }
         }
 
         /* Floating particles */
@@ -629,10 +270,23 @@
         }
 
         @keyframes particleRise {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.3; }
-            100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-20vh) scale(1.5);
+                opacity: 0;
+            }
         }
 
         .hero-content {
@@ -774,13 +428,27 @@
         }
 
         @keyframes bookReveal {
-            from { transform: rotateY(-90deg) rotateX(20deg) scale(0.5); opacity: 0; }
-            to { transform: rotateY(-20deg) rotateX(10deg) scale(1); opacity: 1; }
+            from {
+                transform: rotateY(-90deg) rotateX(20deg) scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: rotateY(-20deg) rotateX(10deg) scale(1);
+                opacity: 1;
+            }
         }
 
         @keyframes bookFloat {
-            0%, 100% { transform: rotateY(-20deg) rotateX(10deg) translateY(0); }
-            50% { transform: rotateY(-15deg) rotateX(8deg) translateY(-12px); }
+
+            0%,
+            100% {
+                transform: rotateY(-20deg) rotateX(10deg) translateY(0);
+            }
+
+            50% {
+                transform: rotateY(-15deg) rotateX(8deg) translateY(-12px);
+            }
         }
 
         .book-cover {
@@ -796,9 +464,18 @@
         }
 
         @keyframes openBook {
-            0% { transform: rotateY(0deg); }
-            40%, 60% { transform: rotateY(-35deg); }
-            100% { transform: rotateY(0deg); }
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            40%,
+            60% {
+                transform: rotateY(-35deg);
+            }
+
+            100% {
+                transform: rotateY(0deg);
+            }
         }
 
         .book-cover-front {
@@ -912,9 +589,23 @@
         }
 
         @keyframes pageFlip {
-            0%, 100% { transform: rotateY(0deg); opacity: 0; }
-            15%, 85% { opacity: 1; }
-            40%, 60% { transform: rotateY(-50deg); opacity: 1; }
+
+            0%,
+            100% {
+                transform: rotateY(0deg);
+                opacity: 0;
+            }
+
+            15%,
+            85% {
+                opacity: 1;
+            }
+
+            40%,
+            60% {
+                transform: rotateY(-50deg);
+                opacity: 1;
+            }
         }
 
         /* Sparkles around book */
@@ -925,8 +616,17 @@
         }
 
         @keyframes sparkleAnim {
-            0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
-            50% { transform: scale(1) rotate(180deg); opacity: 1; }
+
+            0%,
+            100% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1) rotate(180deg);
+                opacity: 1;
+            }
         }
 
         /* Stats row */
@@ -1003,13 +703,27 @@
         }
 
         @keyframes wheelScroll {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(10px); opacity: 0; }
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(10px);
+                opacity: 0;
+            }
         }
 
         @keyframes scrollBounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(6px); }
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(6px);
+            }
         }
 
         /* ── SECTION: HOW IT WORKS ── */
@@ -1202,8 +916,13 @@
             transform: translateY(0);
         }
 
-        .feature-card:nth-child(3n) { border-right: none; }
-        .feature-card:nth-child(n+4) { border-bottom: none; }
+        .feature-card:nth-child(3n) {
+            border-right: none;
+        }
+
+        .feature-card:nth-child(n+4) {
+            border-bottom: none;
+        }
 
         .feature-icon {
             width: 52px;
@@ -1460,13 +1179,25 @@
 
         /* ── ANIMATIONS ── */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .reveal {
@@ -1513,17 +1244,33 @@
         }
 
         @keyframes marquee {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
         }
 
         /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
-            .navbar { padding: 16px 24px; }
-            .navbar.scrolled { padding: 12px 24px; }
+            .navbar {
+                padding: 16px 24px;
+            }
 
-            .nav-links, .nav-cta { display: none; }
-            .hamburger { display: block; }
+            .navbar.scrolled {
+                padding: 12px 24px;
+            }
+
+            .nav-links,
+            .nav-cta {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
 
             /* Mobile Menu Classes Toggled via JS */
             .nav-links.nav-mobile-active {
@@ -1539,6 +1286,7 @@
                 border-bottom: 1px solid rgba(22, 101, 52, 0.1);
                 z-index: 99;
             }
+
             .nav-cta.nav-mobile-active {
                 display: inline-flex;
                 position: fixed;
@@ -1549,19 +1297,50 @@
                 z-index: 99;
             }
 
-            .hero { padding: 100px 24px 60px; }
-            .hero-title { letter-spacing: -2px; }
-            .stats-row { gap: 24px; }
-            .stat-num { font-size: 28px; }
+            .hero {
+                padding: 100px 24px 60px;
+            }
 
-            .section-how, .section-features, .section-stats, .section-cta {
+            .hero-title {
+                letter-spacing: -2px;
+            }
+
+            .stats-row {
+                gap: 24px;
+            }
+
+            .stat-num {
+                font-size: 28px;
+            }
+
+            .section-how,
+            .section-features,
+            .section-stats,
+            .section-cta {
                 padding: 80px 24px;
             }
-            .how-grid { grid-template-columns: 1fr; gap: 48px; }
-            .features-grid { grid-template-columns: 1fr; }
-            .feature-card:nth-child(n) { border-right: none; }
-            .stats-inner { grid-template-columns: 1fr 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
+
+            .how-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card:nth-child(n) {
+                border-right: none;
+            }
+
+            .stats-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
             .footer-bottom {
                 flex-direction: column;
                 gap: 16px;
@@ -1603,12 +1382,12 @@
         <div class="blob blob-3"></div>
 
         <div class="hero-content">
-            <div class="hero-eyebrow">
+            {{-- <div class="hero-eyebrow">
                 <i class="fas fa-graduation-cap" style="font-size:10px"></i>
                 Sistem Perpustakaan Digital
-            </div>
+            </div> --}}
 
-            <h1 class="hero-title">
+            <h1 class="hero-title mt-10">
                 Buka Halaman,<br>
                 Buka <span class="highlight">Masa Depan.</span>
             </h1>
@@ -1643,13 +1422,16 @@
                     <div class="book-spine"><span class="book-spine-text">Ruang Baca</span></div>
                 </div>
 
-                <svg class="sparkle" style="width:16px;top:10px;right:20px;animation-delay:0.3s" viewBox="0 0 16 16" fill="none">
+                <svg class="sparkle" style="width:16px;top:10px;right:20px;animation-delay:0.3s" viewBox="0 0 16 16"
+                    fill="none">
                     <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#22c55e" opacity="0.7" />
                 </svg>
-                <svg class="sparkle" style="width:10px;top:60px;left:10px;animation-delay:1s" viewBox="0 0 16 16" fill="none">
+                <svg class="sparkle" style="width:10px;top:60px;left:10px;animation-delay:1s" viewBox="0 0 16 16"
+                    fill="none">
                     <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#4ade80" opacity="0.8" />
                 </svg>
-                <svg class="sparkle" style="width:12px;bottom:20px;right:10px;animation-delay:0.7s" viewBox="0 0 16 16" fill="none">
+                <svg class="sparkle" style="width:12px;bottom:20px;right:10px;animation-delay:0.7s" viewBox="0 0 16 16"
+                    fill="none">
                     <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5Z" fill="#86efac" opacity="0.6" />
                 </svg>
             </div>
@@ -1676,7 +1458,7 @@
             <div class="scroll-mouse">
                 <div class="scroll-wheel"></div>
             </div>
-            <span>Scroll</span>
+            {{-- <span>Scroll</span> --}}
         </div>
     </section>
 
@@ -1700,7 +1482,8 @@
             <div class="reveal">
                 <span class="section-label">Cara Kerja</span>
                 <h2 class="section-title">Sederhana, Cepat,<br>& Terpercaya.</h2>
-                <p class="section-sub">Dari permintaan pinjam hingga pengembalian — semua terkontrol dengan sistem persetujuan berlapis.</p>
+                <p class="section-sub">Dari permintaan pinjam hingga pengembalian — semua terkontrol dengan sistem
+                    persetujuan berlapis.</p>
             </div>
 
             <div class="how-grid">
@@ -1709,39 +1492,50 @@
                         <div class="step-num">1</div>
                         <div class="step-content">
                             <h3>Cari & Pilih Buku</h3>
-                            <p>Jelajahi katalog lengkap, filter berdasarkan kategori, penulis, atau rating. Temukan buku yang sempurna.</p>
+                            <p>Jelajahi katalog lengkap, filter berdasarkan kategori, penulis, atau rating. Temukan buku
+                                yang sempurna.</p>
                         </div>
                     </div>
                     <div class="how-step" data-delay="150">
                         <div class="step-num">2</div>
                         <div class="step-content">
                             <h3>Ajukan Permintaan</h3>
-                            <p>Klik tombol pinjam dan pengajuanmu langsung dikirim ke pustakawan untuk mendapat persetujuan.</p>
+                            <p>Klik tombol pinjam dan pengajuanmu langsung dikirim ke pustakawan untuk mendapat
+                                persetujuan.</p>
                         </div>
                     </div>
                     <div class="how-step" data-delay="300">
                         <div class="step-num">3</div>
                         <div class="step-content">
                             <h3>Tunggu ACC Admin</h3>
-                            <p>Pustakawan memverifikasi stok dan menyetujui permintaanmu. Kamu dapat notifikasi langsung.</p>
+                            <p>Pustakawan memverifikasi stok dan menyetujui permintaanmu. Kamu dapat notifikasi
+                                langsung.</p>
                         </div>
                     </div>
                     <div class="how-step" data-delay="450">
                         <div class="step-num">4</div>
                         <div class="step-content">
                             <h3>Baca & Kembalikan</h3>
-                            <p>Nikmati membaca! Saat selesai, ajukan pengembalian melalui aplikasi — pustakawan akan mengkonfirmasi.</p>
+                            <p>Nikmati membaca! Saat selesai, ajukan pengembalian melalui aplikasi — pustakawan akan
+                                mengkonfirmasi.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="how-visual">
-                    <div id="book-stack-viz" style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-                        <div style="width:280px;height:480px;background:var(--green-deep);border-radius:32px;padding:24px;position:relative;box-shadow:0 40px 80px rgba(13,61,46,0.3);">
-                            <div style="background:rgba(255,255,255,0.04);border-radius:20px;height:100%;overflow:hidden;padding:20px;">
-                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-                                    <div style="font-family:'Playfair Display',serif;color:white;font-size:15px;font-weight:700;">Katalog Buku</div>
-                                    <div style="width:28px;height:28px;background:rgba(34,197,94,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                    <div id="book-stack-viz"
+                        style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                        <div
+                            style="width:280px;height:480px;background:var(--green-deep);border-radius:32px;padding:24px;position:relative;box-shadow:0 40px 80px rgba(13,61,46,0.3);">
+                            <div
+                                style="background:rgba(255,255,255,0.04);border-radius:20px;height:100%;overflow:hidden;padding:20px;">
+                                <div
+                                    style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                                    <div
+                                        style="font-family:'Playfair Display',serif;color:white;font-size:15px;font-weight:700;">
+                                        Katalog Buku</div>
+                                    <div
+                                        style="width:28px;height:28px;background:rgba(34,197,94,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;">
                                         <i class="fas fa-search" style="color:#22c55e;font-size:11px;"></i>
                                     </div>
                                 </div>
@@ -1751,42 +1545,61 @@
                                         ['Matematika Kelas XII', 'Ali Sudrajat', '#166534'],
                                         ['Fisika Modern', 'Budi Santoso', '#0d3d2e'],
                                         ['Bahasa Indonesia', 'Siti Rahayu', '#1a4a38'],
-                                        ['Kimia Dasar', 'Ahmad Fauzi', '#0f3529']
+                                        ['Kimia Dasar', 'Ahmad Fauzi', '#0f3529'],
                                     ];
                                 @endphp
                                 <div style="display:flex;flex-direction:column;gap:10px;">
                                     @foreach ($mockBooks as $i => $mb)
-                                        <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.04);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.06);animation:fadeUp 0.5s ease {{ $i * 0.15 + 1.2 }}s both;">
-                                            <div style="width:36px;height:48px;background:{{ $mb[2] }};border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-                                                <i class="fas fa-book" style="color:rgba(255,255,255,0.5);font-size:12px;"></i>
+                                        <div
+                                            style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.04);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.06);animation:fadeUp 0.5s ease {{ $i * 0.15 + 1.2 }}s both;">
+                                            <div
+                                                style="width:36px;height:48px;background:{{ $mb[2] }};border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                                                <i class="fas fa-book"
+                                                    style="color:rgba(255,255,255,0.5);font-size:12px;"></i>
                                             </div>
                                             <div style="flex:1;min-width:0;">
-                                                <div style="font-size:12px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ $mb[0] }}</div>
-                                                <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px;">{{ $mb[1] }}</div>
+                                                <div
+                                                    style="font-size:12px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                                    {{ $mb[0] }}</div>
+                                                <div
+                                                    style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px;">
+                                                    {{ $mb[1] }}</div>
                                                 <div style="display:flex;gap:4px;margin-top:6px;">
-                                                    <div style="height:4px;width:40px;background:rgba(34,197,94,0.2);border-radius:2px;"></div>
-                                                    <div style="height:4px;width:24px;background:rgba(34,197,94,0.1);border-radius:2px;"></div>
+                                                    <div
+                                                        style="height:4px;width:40px;background:rgba(34,197,94,0.2);border-radius:2px;">
+                                                    </div>
+                                                    <div
+                                                        style="height:4px;width:24px;background:rgba(34,197,94,0.1);border-radius:2px;">
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div style="width:28px;height:28px;background:rgba(34,197,94,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                            <div
+                                                style="width:28px;height:28px;background:rgba(34,197,94,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                                 <i class="fas fa-plus" style="color:#22c55e;font-size:10px;"></i>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
 
-                                <div style="margin-top:16px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;">
-                                    <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;animation:pulse 1.5s infinite;"></div>
-                                    <span style="font-size:11px;color:rgba(255,255,255,0.6);">2 buku menunggu ACC admin</span>
+                                <div
+                                    style="margin-top:16px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;">
+                                    <div
+                                        style="width:8px;height:8px;background:#22c55e;border-radius:50%;animation:pulse 1.5s infinite;">
+                                    </div>
+                                    <span style="font-size:11px;color:rgba(255,255,255,0.6);">2 buku menunggu ACC
+                                        admin</span>
                                 </div>
                             </div>
 
-                            <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;"></div>
+                            <div
+                                style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;">
+                            </div>
                         </div>
 
                         <div style="position:absolute;top:20px;right:10px;display:flex;flex-direction:column;gap:6px;">
                             @for ($i = 0; $i < 6; $i++)
-                                <div style="width:4px;height:4px;background:rgba(22,101,52,0.25);border-radius:50%;"></div>
+                                <div style="width:4px;height:4px;background:rgba(22,101,52,0.25);border-radius:50%;">
+                                </div>
                             @endfor
                         </div>
                     </div>
@@ -1799,18 +1612,43 @@
         <div class="features-header reveal">
             <span class="section-label">Fitur Unggulan</span>
             <h2 class="section-title">Semua yang Kamu<br>Butuhkan.</h2>
-            <p class="section-sub" style="margin-top:16px">Dirancang untuk kemudahan siswa dan efisiensi pustakawan dalam satu platform terpadu.</p>
+            <p class="section-sub" style="margin-top:16px">Dirancang untuk kemudahan siswa dan efisiensi pustakawan
+                dalam satu platform terpadu.</p>
         </div>
 
         <div class="features-grid">
             @php
                 $features = [
-                    ['fas fa-book', 'Katalog Digital', 'Ribuan koleksi buku tersedia dan dapat dicari dengan mudah berdasarkan judul, penulis, atau ISBN.'],
-                    ['fas fa-check-double', 'Sistem Persetujuan', 'Setiap peminjaman dan pengembalian melewati verifikasi pustakawan untuk kontrol yang lebih baik.'],
-                    ['fas fa-bell', 'Notifikasi Real-Time', 'Siswa dan admin mendapat notifikasi langsung untuk setiap update status peminjaman.'],
-                    ['fas fa-heart', 'Wishlist Buku', 'Simpan buku favorit ke wishlist dan dapatkan info saat buku tersedia.'],
-                    ['fas fa-star', 'Ulasan & Rating', 'Baca dan tulis ulasan untuk membantu sesama siswa memilih buku terbaik.'],
-                    ['fas fa-coins', 'Denda Otomatis', 'Sistem denda keterlambatan dihitung otomatis sesuai kebijakan sekolah masing-masing.'],
+                    [
+                        'fas fa-book',
+                        'Katalog Digital',
+                        'Ribuan koleksi buku tersedia dan dapat dicari dengan mudah berdasarkan judul, penulis, atau ISBN.',
+                    ],
+                    [
+                        'fas fa-check-double',
+                        'Sistem Persetujuan',
+                        'Setiap peminjaman dan pengembalian melewati verifikasi pustakawan untuk kontrol yang lebih baik.',
+                    ],
+                    [
+                        'fas fa-bell',
+                        'Notifikasi Real-Time',
+                        'Siswa dan admin mendapat notifikasi langsung untuk setiap update status peminjaman.',
+                    ],
+                    [
+                        'fas fa-heart',
+                        'Wishlist Buku',
+                        'Simpan buku favorit ke wishlist dan dapatkan info saat buku tersedia.',
+                    ],
+                    [
+                        'fas fa-star',
+                        'Ulasan & Rating',
+                        'Baca dan tulis ulasan untuk membantu sesama siswa memilih buku terbaik.',
+                    ],
+                    [
+                        'fas fa-coins',
+                        'Denda Otomatis',
+                        'Sistem denda keterlambatan dihitung otomatis sesuai kebijakan sekolah masing-masing.',
+                    ],
                 ];
             @endphp
             @foreach ($features as $i => $f)
@@ -1854,7 +1692,8 @@
                 Mulai Sekarang — Gratis
             </div>
             <h2 class="cta-title">Siap Modernisasi Perpustakaan Sekolahmu?</h2>
-            <p class="cta-sub">Bergabunglah dengan ratusan sekolah dan rasakan kemudahan mengelola literasi generasi masa depan.</p>
+            <p class="cta-sub">Bergabunglah dengan ratusan sekolah dan rasakan kemudahan mengelola literasi generasi
+                masa depan.</p>
             <div class="cta-btns">
                 <a href="{{ route('login') }}" class="btn-primary">
                     <i class="fas fa-book-open" style="font-size:14px"></i>
@@ -1870,11 +1709,17 @@
     <footer id="kontak">
         <div class="footer-grid">
             <div class="footer-brand">
-                <a href="{{ route('landing') }}" class="logo">
-                    <div class="logo-icon"><i class="fas fa-book-open"></i></div>
-                    <span class="logo-text">RUANG <span>BACA</span></span>
+                <a href="{{ route('landing') }}" class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-7 h-7 object-contain">
+                    </div>
+                    <div class="flex flex-col leading-tight">
+                        <span class="text-white text-xL font-bold tracking-wider">RUANG</span>
+                        <span class="text-white text-xl font-bold tracking-tight">BACA</span>
+                    </div>
                 </a>
-                <p class="footer-desc">Platform perpustakaan digital terpercaya untuk sekolah modern di Indonesia. Menghubungkan siswa dengan pengetahuan tanpa batas.</p>
+                <p class="footer-desc">Platform perpustakaan digital terpercaya untuk sekolah modern di Indonesia.
+                    Menghubungkan siswa dengan pengetahuan tanpa batas.</p>
             </div>
             <div class="footer-col">
                 <h4>Platform</h4>
@@ -1937,7 +1782,9 @@
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             navbar.classList.toggle('scrolled', window.scrollY > 60);
-        }, { passive: true });
+        }, {
+            passive: true
+        });
 
         // ── Intersection Observer for reveals ─────────────────────────
         const observer = new IntersectionObserver((entries) => {
@@ -1950,7 +1797,10 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -60px 0px'
+        });
 
         document.querySelectorAll('.reveal, .how-step, .feature-card, .stat-block').forEach(el => {
             observer.observe(el);
@@ -1964,7 +1814,9 @@
                 const speed = [0.15, -0.1, 0.08][i] || 0;
                 b.style.transform = `translateY(${y * speed}px)`;
             });
-        }, { passive: true });
+        }, {
+            passive: true
+        });
 
         // ── Mobile menu ────────────────────────────────────────────────
         function toggleMenu() {
@@ -1980,7 +1832,10 @@
                 const target = document.querySelector(a.getAttribute('href'));
                 if (target) {
                     e.preventDefault();
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
         });
@@ -2024,9 +1879,12 @@
                     statObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.5 });
+        }, {
+            threshold: 0.5
+        });
 
         document.querySelectorAll('.stat-block').forEach(el => statObserver.observe(el));
     </script>
 </body>
+
 </html>
