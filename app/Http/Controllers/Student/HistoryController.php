@@ -33,7 +33,7 @@ class HistoryController extends Controller
             ->where('user_id', $userId)
             ->whereIn('status', ['returned', 'rejected'])
             ->latest('updated_at')
-            ->paginate(10);
+            ->paginate(5);
 
         $totalBorrowed = Borrowing::where('user_id', $userId)->count();
         $totalActive   = $activeBorrows->whereIn('status', ['borrowed', 'late'])->count();

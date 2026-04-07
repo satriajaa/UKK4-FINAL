@@ -109,4 +109,36 @@ class SchoolController extends Controller
         return redirect()->route('superadmin.dashboard')
             ->with('success', "Sekolah \"{$name}\" berhasil dihapus dari sistem.");
     }
+
+    /**
+     * Show detailed school information.
+     */
+    public function show(School $school)
+    {
+        // Load jumlah data (buku, siswa, admin, transaksi, kelas) dan total denda
+        $school->loadCount([
+            'books',
+            'users as students_count' => fn($q) => $q->where('role', 'student')->where('status', 'approved'),
+            'users as admins_count'   => fn($q) => $q->where('role', 'school_admin'),
+            'borrowings as active_borrows_count' => fn($q) => $q->whereIn('status', ['borrowed', 'late']),
+            'classes'
+        ])->loadSum('borrowings as total_fine', 'fine');
+
+        // Ambil daftar admin sekolah
+        $admins = $school->users()->where('role', 'school_admin')->get();
+
+        // Ambil daftar kelas beserta data siswanya (hanya yang sudah di-approve)
+        $classes = $school->classes()->with(['users' => function($q) {
+            $q->where('role', 'student')->where('status', 'approved')->orderBy('full_name', 'asc');
+        }])->orderBy('name', 'asc')->get();
+
+        // Hitung jumlah jurusan yang unik di sekolah ini
+        $majorsCount = $school->classes()
+            ->whereNotNull('major')
+            ->where('major', '!=', '')
+            ->distinct('major')
+            ->count('major');
+
+        return view('superadmin.show', compact('school', 'admins', 'classes', 'majorsCount'));
+    }
 }

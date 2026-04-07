@@ -40,11 +40,11 @@
                 return $trx;
             });
 
-        $returnedBorrows = \App\Models\Borrowing::with('book.category')
-            ->where('user_id', $userId)
-            ->whereIn('status', ['returned', 'rejected'])
-            ->latest('updated_at')
-            ->get();
+        // $returnedBorrows = \App\Models\Borrowing::with('book.category')
+        //     ->where('user_id', $userId)
+        //     ->whereIn('status', ['returned', 'rejected'])
+        //     ->latest('updated_at')
+        //     ->get();
 
         $totalBorrowed = \App\Models\Borrowing::where('user_id', $userId)->count();
         $totalActive   = $activeBorrows->whereIn('status', ['borrowed', 'late'])->count();

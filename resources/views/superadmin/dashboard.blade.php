@@ -3,548 +3,302 @@
 @section('title', 'Dashboard')
 
 @push('styles')
-<style>
-    /* ── PAGE HEADER ── */
-    .sa-page-header {
-        margin-bottom: 26px;
-        animation: fadeUp 0.35s ease both;
-    }
-    .sa-page-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 26px; font-weight: 900;
-        letter-spacing: -0.8px; color: var(--ink);
-        display: flex; align-items: center; gap: 10px;
-        line-height: 1.1;
-    }
-    .sa-page-subtitle {
-        font-size: 13px; color: var(--muted); margin-top: 4px;
-    }
-    .sa-page-subtitle span {
-        color: var(--gmid); font-weight: 600;
-    }
-
-    /* ── STAT CARDS ── */
-    .sa-stat-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 14px;
-        margin-bottom: 24px;
-    }
-    .sa-stat-card {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 18px 20px;
-        position: relative; overflow: hidden;
-        transition: border-color .2s, transform .15s, box-shadow .2s;
-        animation: fadeUp 0.4s ease both;
-    }
-    .sa-stat-card:hover {
-        border-color: var(--border2);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(22,101,52,0.08);
-    }
-    .sa-stat-card::before {
-        content: '';
-        position: absolute; top: -16px; right: -16px;
-        width: 64px; height: 64px; border-radius: 50%;
-        background: var(--gbright); opacity: 0.06;
-    }
-    .sa-stat-label {
-        font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
-        text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
-    }
-    .sa-stat-val {
-        font-family: 'Playfair Display', serif;
-        font-size: 32px; font-weight: 900;
-        color: var(--gmid); line-height: 1;
-        letter-spacing: -1px;
-    }
-    .sa-stat-sub {
-        font-size: 11px; color: var(--muted); margin-top: 6px;
-        display: flex; align-items: center; gap: 4px;
-    }
-    .sa-stat-icon {
-        position: absolute; top: 16px; right: 18px;
-        font-size: 20px; color: var(--gmid); opacity: 0.12;
-    }
-    .stat-red .sa-stat-sub { color: #dc2626; }
-    .stat-amber .sa-stat-sub { color: #b45309; }
-
-    /* ── SECTION HEADING ── */
-    .sa-section-head {
-        display: flex; align-items: center; justify-content: space-between;
-        margin-bottom: 16px; animation: fadeUp 0.4s ease 0.1s both;
-    }
-    .sa-section-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 16px; font-weight: 900;
-        color: var(--ink); letter-spacing: -0.3px;
-        display: flex; align-items: center; gap: 8px;
-    }
-    .sa-section-count {
-        font-size: 10px; font-weight: 700;
-        background: var(--surface); border: 1px solid var(--border2);
-        color: var(--muted); padding: 2px 8px; border-radius: 8px;
-    }
-
-    /* ── FILTER BAR ── */
-    .sa-filter-bar {
-        display: flex; gap: 8px; margin-bottom: 16px;
-        animation: fadeUp 0.4s ease 0.15s both;
-    }
-    .sa-filter-input {
-        flex: 1; background: white;
-        border: 1px solid var(--border2);
-        border-radius: 10px; padding: 8px 14px;
-        font-size: 12px; color: var(--ink);
-        font-family: 'DM Sans', sans-serif; outline: none;
-        transition: border-color 0.15s;
-    }
-    .sa-filter-input:focus { border-color: var(--gmid); }
-    .sa-filter-input::placeholder { color: var(--muted); }
-    .sa-filter-select {
-        background: white; border: 1px solid var(--border2);
-        border-radius: 10px; padding: 8px 12px;
-        font-size: 12px; color: var(--ink);
-        font-family: 'DM Sans', sans-serif; outline: none;
-        cursor: pointer; transition: border-color 0.15s;
-    }
-    .sa-filter-select:focus { border-color: var(--gmid); }
-
-    /* ── SCHOOL GRID ── */
-    .school-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-        animation: fadeUp 0.4s ease 0.2s both;
-    }
-
-    /* ── SCHOOL CARD ── */
-    .school-card {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 20px;
-        cursor: pointer;
-        transition: all 0.2s;
-        position: relative; overflow: hidden;
-    }
-    .school-card::after {
-        content: '';
-        position: absolute; top: 0; left: 0; right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--gmid), var(--gbright));
-        opacity: 0; transition: opacity 0.2s;
-    }
-    .school-card:hover {
-        border-color: var(--border2);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(22,101,52,0.08);
-    }
-    .school-card:hover::after { opacity: 1; }
-
-    .sc-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
-    .sc-avatar {
-        width: 40px; height: 40px; border-radius: 12px;
-        background: rgba(22,101,52,0.07);
-        border: 1px solid var(--border);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 18px; flex-shrink: 0;
-    }
-    .sc-name { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.3; }
-    .sc-npsn { font-size: 10px; color: var(--muted); margin-top: 2px; }
-    .sc-badge {
-        display: inline-flex; align-items: center; gap: 4px;
-        font-size: 9px; font-weight: 700; padding: 2px 7px;
-        border-radius: 5px; letter-spacing: 0.5px; margin-top: 4px;
-    }
-    .sc-badge-active { background: rgba(34,197,94,0.1); color: #166534; border: 1px solid rgba(34,197,94,0.2); }
-    .sc-badge-inactive { background: rgba(220,38,38,0.07); color: #991b1b; border: 1px solid rgba(220,38,38,0.15); }
-
-    .sc-stats {
-        display: grid; grid-template-columns: repeat(3, 1fr);
-        gap: 8px; margin-bottom: 14px;
-    }
-    .sc-stat {
-        background: var(--surface); border-radius: 10px;
-        padding: 9px 6px; text-align: center;
-    }
-    .sc-stat-val { font-size: 15px; font-weight: 700; color: var(--gmid); display: block; line-height: 1; }
-    .sc-stat-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
-
-    .sc-footer {
-        display: flex; align-items: center; justify-content: space-between;
-        padding-top: 12px; border-top: 1px solid var(--border);
-    }
-    .sc-meta { font-size: 11px; color: var(--muted); }
-    .sc-meta strong { color: var(--gmid); font-weight: 600; }
-
-    .btn-detail {
-        font-size: 11px; font-weight: 600; padding: 6px 14px;
-        border-radius: 8px; color: var(--gmid);
-        background: rgba(22,101,52,0.07);
-        border: 1px solid var(--border2);
-        cursor: pointer; transition: all 0.15s;
-        font-family: 'DM Sans', sans-serif;
-    }
-    .btn-detail:hover { background: rgba(22,101,52,0.14); }
-
-    .btn-add {
-        display: inline-flex; align-items: center; gap: 8px;
-        background: var(--gmid); color: white;
-        border: none; padding: 9px 18px; border-radius: 100px;
-        font-size: 13px; font-weight: 600; cursor: pointer;
-        font-family: 'DM Sans', sans-serif; text-decoration: none;
-        transition: all 0.2s;
-    }
-    .btn-add:hover { background: var(--gdeep); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(13,61,46,0.2); }
-
-    /* ── DETAIL PANEL ── */
-    .detail-panel {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        overflow: hidden;
-        margin-top: 20px;
-        animation: fadeUp 0.3s ease both;
-        display: none;
-    }
-    .detail-panel.open { display: block; }
-
-    .detail-header {
-        background: var(--gdeep);
-        padding: 20px 24px;
-        display: flex; align-items: center; justify-content: space-between;
-    }
-    .detail-header-left { display: flex; align-items: center; gap: 14px; }
-    .detail-school-icon {
-        width: 44px; height: 44px; background: rgba(255,255,255,0.1);
-        border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;
-    }
-    .detail-school-name {
-        font-family: 'Playfair Display', serif;
-        font-size: 17px; font-weight: 900; color: white; line-height: 1.2;
-    }
-    .detail-school-npsn { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
-    .btn-close-detail {
-        display: flex; align-items: center; gap: 6px;
-        background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-        color: rgba(255,255,255,0.7); padding: 7px 14px; border-radius: 8px;
-        font-size: 12px; font-weight: 600; cursor: pointer;
-        font-family: 'DM Sans', sans-serif; transition: all 0.15s;
-    }
-    .btn-close-detail:hover { background: rgba(255,255,255,0.15); color: white; }
-
-    .detail-body { padding: 24px; }
-    .detail-body-grid {
-        display: grid; grid-template-columns: 1fr 1.4fr 1fr;
-        gap: 24px;
-    }
-
-    .detail-section-label {
-        font-size: 9px; font-weight: 700; letter-spacing: 2px;
-        text-transform: uppercase; color: var(--gmid);
-        margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
-    }
-    .detail-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
-
-    .info-field { margin-bottom: 12px; }
-    .info-lbl { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
-    .info-val { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.4; }
-
-    .detail-stats-grid {
-        display: grid; grid-template-columns: 1fr 1fr;
-        gap: 8px;
-    }
-    .detail-stat {
-        background: var(--surface); border: 1px solid var(--border);
-        border-radius: 12px; padding: 12px; text-align: center;
-    }
-    .detail-stat.highlight { background: rgba(22,101,52,0.06); border-color: rgba(22,101,52,0.18); }
-    .detail-stat-val {
-        font-family: 'Playfair Display', serif;
-        font-size: 24px; font-weight: 900; color: var(--gmid); display: block; line-height: 1;
-    }
-    .detail-stat-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
-
-    .admin-row {
-        display: flex; align-items: center; gap: 10px;
-        background: var(--surface); border: 1px solid var(--border);
-        border-radius: 10px; padding: 10px 12px; margin-bottom: 8px;
-    }
-    .admin-num {
-        width: 22px; height: 22px; border-radius: 50%;
-        background: rgba(22,101,52,0.1); border: 1px solid var(--border2);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 10px; font-weight: 700; color: var(--gmid); flex-shrink: 0;
-    }
-    .admin-name { font-size: 12px; font-weight: 600; color: var(--ink); }
-    .admin-info { font-size: 10px; color: var(--muted); }
-
-    .detail-actions {
-        display: flex; gap: 8px; justify-content: flex-end;
-        padding-top: 16px; margin-top: 16px;
-        border-top: 1px solid var(--border);
-    }
-    .btn-edit-school {
-        display: inline-flex; align-items: center; gap: 6px;
-        background: rgba(22,101,52,0.08); border: 1px solid var(--border2);
-        color: var(--gmid); padding: 8px 18px; border-radius: 10px;
-        font-size: 12px; font-weight: 600; cursor: pointer;
-        font-family: 'DM Sans', sans-serif; transition: all 0.15s;
-    }
-    .btn-edit-school:hover { background: rgba(22,101,52,0.16); }
-    .btn-delete-school {
-        display: inline-flex; align-items: center; gap: 6px;
-        background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.2);
-        color: #991b1b; padding: 8px 18px; border-radius: 10px;
-        font-size: 12px; font-weight: 600; cursor: pointer;
-        font-family: 'DM Sans', sans-serif; transition: all 0.15s;
-        text-decoration: none;
-    }
-    .btn-delete-school:hover { background: rgba(220,38,38,0.15); }
-
-    @keyframes fadeUp {
-        from { opacity:0; transform:translateY(10px); }
-        to   { opacity:1; transform:translateY(0); }
-    }
-</style>
+    <style>
+        /* Sisa modal overlay biar blur kayak di history */
+        .modal-overlay {
+            backdrop-filter: blur(4px);
+        }
+    </style>
 @endpush
 
 @section('content')
 
-{{-- ── PAGE HEADER ── --}}
-<div class="sa-page-header" style="display:flex;align-items:flex-start;justify-content:space-between;">
-    <div>
-        <div class="sa-page-title">
-            <i class="fas fa-th-large" style="font-size:20px;color:var(--gmid);"></i>
-            Dashboard Superadmin
+    {{-- ── PAGE HEADER ── --}}
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <i class="fas fa-th-large text-evergreen-600"></i> Dashboard Superadmin
+            </h1>
+            <p class="text-sm text-gray-500 mt-0.5">
+                Mengelola seluruh sistem perpustakaan sekolah &mdash;
+                <span class="font-semibold text-gray-700">{{ now()->format('d M Y, H:i') }}</span>
+            </p>
         </div>
-        <div class="sa-page-subtitle">
-            Selamat datang, Superadmin! Mengelola seluruh sistem perpustakaan sekolah &mdash;
-            <span>{{ now()->format('d M Y, H:i') }}</span>
-        </div>
-    </div>
-    <a href="{{ route('superadmin.schools.create') }}" class="btn-add">
-        <i class="fas fa-plus" style="font-size:11px;"></i> Tambah Sekolah Baru
-    </a>
-</div>
-
-{{-- ── STAT CARDS ── --}}
-<div class="sa-stat-grid">
-    <div class="sa-stat-card" style="animation-delay:0.04s;">
-        <div class="sa-stat-label">Total Sekolah</div>
-        <div class="sa-stat-val">{{ $totalSchools }}</div>
-        <div class="sa-stat-sub">
-            <span style="color:var(--gmid);">{{ $activeSchools }} aktif</span>
-            @if($inactiveSchools > 0)
-                &nbsp;·&nbsp;<span style="color:#dc2626;">{{ $inactiveSchools }} nonaktif</span>
-            @endif
-        </div>
-        <i class="fas fa-school sa-stat-icon"></i>
-    </div>
-    <div class="sa-stat-card" style="animation-delay:0.08s;">
-        <div class="sa-stat-label">Total Buku</div>
-        <div class="sa-stat-val">{{ number_format($totalBooks) }}</div>
-        <div class="sa-stat-sub">+{{ $newBooksThisMonth }} buku bulan ini</div>
-        <i class="fas fa-book sa-stat-icon"></i>
-    </div>
-    <div class="sa-stat-card stat-amber" style="animation-delay:0.12s;">
-        <div class="sa-stat-label">Total Siswa</div>
-        <div class="sa-stat-val">{{ number_format($totalStudents) }}</div>
-        <div class="sa-stat-sub">
-            @if($pendingMembers > 0)
-                <i class="fas fa-clock" style="font-size:10px;"></i> {{ $pendingMembers }} menunggu verifikasi
-            @else
-                +{{ $newStudentsThisMonth }} bulan ini
-            @endif
-        </div>
-        <i class="fas fa-users sa-stat-icon"></i>
-    </div>
-    <div class="sa-stat-card stat-red" style="animation-delay:0.16s;">
-        <div class="sa-stat-label">Peminjaman Aktif</div>
-        <div class="sa-stat-val">{{ $activeBorrows }}</div>
-        <div class="sa-stat-sub">
-            @if($lateBorrows > 0)
-                <i class="fas fa-exclamation-triangle" style="font-size:10px;"></i> {{ $lateBorrows }} terlambat
-            @else
-                Semua tepat waktu
-            @endif
-        </div>
-        <i class="fas fa-exchange-alt sa-stat-icon"></i>
-    </div>
-</div>
-
-{{-- ── MANAGE SCHOOLS ── --}}
-<div class="sa-section-head">
-    <div class="sa-section-title">
-        🏫 Manage Schools
-        <span class="sa-section-count">{{ $schools->count() }} sekolah</span>
-    </div>
-</div>
-
-<div class="sa-filter-bar">
-    <input class="sa-filter-input" type="text" id="schoolSearch" placeholder="🔍  Cari nama sekolah atau NPSN..." oninput="filterSchools()">
-    <select class="sa-filter-select" id="statusFilter" onchange="filterSchools()">
-        <option value="">Semua Status</option>
-        <option value="active">Aktif</option>
-        <option value="inactive">Nonaktif</option>
-    </select>
-</div>
-
-{{-- ── SCHOOL GRID ── --}}
-<div class="school-grid" id="schoolGrid">
-    @forelse($schools as $school)
-    <div class="school-card"
-         data-id="{{ $school->id }}"
-         data-name="{{ strtolower($school->name) }}"
-         data-npsn="{{ $school->npsn }}"
-         data-status="{{ $school->status }}">
-        <div class="sc-head">
-            <div class="sc-avatar">🏫</div>
-            <div style="flex:1;min-width:0;">
-                <div class="sc-name">{{ $school->name }}</div>
-                <div class="sc-npsn">ID: NPSN {{ $school->npsn }}</div>
-                <span class="sc-badge {{ $school->status === 'active' ? 'sc-badge-active' : 'sc-badge-inactive' }}">
-                    ● {{ strtoupper($school->status === 'active' ? 'ACTIVE' : 'NONAKTIF') }}
-                </span>
-            </div>
-        </div>
-
-        <div class="sc-stats">
-            <div class="sc-stat">
-                <span class="sc-stat-val">{{ number_format($school->books_count) }}</span>
-                <div class="sc-stat-lbl">Buku</div>
-            </div>
-            <div class="sc-stat">
-                <span class="sc-stat-val">{{ number_format($school->students_count) }}</span>
-                <div class="sc-stat-lbl">Siswa</div>
-            </div>
-            <div class="sc-stat">
-                <span class="sc-stat-val">{{ $school->admins_count }}</span>
-                <div class="sc-stat-lbl">Admin</div>
-            </div>
-        </div>
-
-        <div class="sc-footer">
-            <div class="sc-meta">
-                Denda: <strong>Rp {{ number_format($school->total_fine ?? 0) }}</strong>
-                &nbsp;·&nbsp; Trx: <strong>{{ $school->active_borrows_count }}</strong>
-            </div>
-            <button class="btn-detail" onclick="openDetail({{ $school->id }}, event)">Detail →</button>
-        </div>
-    </div>
-    @empty
-    <div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted);font-size:14px;">
-        <i class="fas fa-school" style="font-size:32px;opacity:0.2;display:block;margin-bottom:12px;"></i>
-        Belum ada sekolah terdaftar.
-    </div>
-    @endforelse
-</div>
-
-{{-- ── DETAIL PANEL (EXPANDED VIEW) ── --}}
-<div class="detail-panel" id="detailPanel">
-    <div class="detail-header">
-        <div class="detail-header-left">
-            <div class="detail-school-icon">🏫</div>
-            <div>
-                <div class="detail-school-name" id="dp-name">—</div>
-                <div class="detail-school-npsn" id="dp-npsn">—</div>
-            </div>
-        </div>
-        <button class="btn-close-detail" onclick="closeDetail()">
-            <i class="fas fa-times"></i> Tutup Detail
-        </button>
+        <a href="{{ route('superadmin.schools.create') }}"
+            class="inline-flex items-center gap-2 bg-evergreen-600 hover:bg-evergreen-700 text-white text-sm font-bold px-5 py-2.5 rounded-full transition shadow-sm">
+            <i class="fas fa-plus text-xs"></i> Tambah Sekolah Baru
+        </a>
     </div>
 
-    <div class="detail-body">
-        <div class="detail-body-grid">
-            {{-- Column 1: Info Sekolah --}}
-            <div>
-                <div class="detail-section-label">School Information</div>
-                <div class="info-field">
-                    <div class="info-lbl">School Name</div>
-                    <div class="info-val" id="dp-full-name">—</div>
-                </div>
-                <div class="info-field">
-                    <div class="info-lbl">NPSN</div>
-                    <div class="info-val" id="dp-npsn-val">—</div>
-                </div>
-                <div class="info-field">
-                    <div class="info-lbl">Address</div>
-                    <div class="info-val" id="dp-addr">—</div>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div class="info-field">
-                        <div class="info-lbl">Contact</div>
-                        <div class="info-val" id="dp-contact">—</div>
-                    </div>
-                    <div class="info-field">
-                        <div class="info-lbl">Email</div>
-                        <div class="info-val" id="dp-email" style="font-size:11px;">—</div>
-                    </div>
+    {{-- ── STAT CARDS ── --}}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {{-- Card 1: Sekolah --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition">
+            <div class="flex items-start justify-between mb-3">
+                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Total Sekolah</div>
+                <div class="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-school text-blue-500 text-sm"></i>
                 </div>
             </div>
-
-            {{-- Column 2: Detailed Stats --}}
-            <div>
-                <div class="detail-section-label">Detailed Stats</div>
-                <div class="detail-stats-grid">
-                    <div class="detail-stat highlight">
-                        <span class="detail-stat-val" id="dp-books">—</span>
-                        <div class="detail-stat-lbl">Total Buku</div>
-                    </div>
-                    <div class="detail-stat">
-                        <span class="detail-stat-val" id="dp-students">—</span>
-                        <div class="detail-stat-lbl">Siswa Aktif</div>
-                    </div>
-                    <div class="detail-stat">
-                        <span class="detail-stat-val" id="dp-admins">—</span>
-                        <div class="detail-stat-lbl">Admin</div>
-                    </div>
-                    <div class="detail-stat">
-                        <span class="detail-stat-val" id="dp-trx">—</span>
-                        <div class="detail-stat-lbl">Transaksi</div>
-                    </div>
-                    <div class="detail-stat" style="grid-column:1/-1;background:rgba(22,101,52,0.04);">
-                        <span class="detail-stat-val" id="dp-fine" style="font-size:20px;">—</span>
-                        <div class="detail-stat-lbl">Total Denda</div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Column 3: Assigned Admins --}}
-            <div>
-                <div class="detail-section-label">Assigned Admins</div>
-                <div id="dp-admin-list">
-                    <div style="text-align:center;padding:24px;color:var(--muted);font-size:12px;">
-                        <i class="fas fa-users" style="font-size:20px;opacity:0.2;display:block;margin-bottom:8px;"></i>
-                        Belum ada admin
-                    </div>
-                </div>
+            <div class="text-4xl font-black text-gray-900 leading-none mb-1">{{ $totalSchools }}</div>
+            <div class="text-xs font-medium mt-2 flex items-center gap-1">
+                <span class="text-evergreen-600 font-bold">{{ $activeSchools }} aktif</span>
+                @if ($inactiveSchools > 0)
+                    <span class="text-gray-300">•</span>
+                    <span class="text-red-500 font-bold">{{ $inactiveSchools }} nonaktif</span>
+                @endif
             </div>
         </div>
 
-        <div class="detail-actions">
-            <a href="#" id="dp-edit-link" class="btn-edit-school">
-                <i class="fas fa-edit"></i> Edit Sekolah
-            </a>
-            <a href="#" id="dp-delete-link" class="btn-delete-school"
-               onclick="return confirm('Yakin ingin menghapus sekolah ini?')">
-                <i class="fas fa-trash"></i> Hapus Sekolah
-            </a>
+        {{-- Card 2: Buku --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition">
+            <div class="flex items-start justify-between mb-3">
+                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Total Buku</div>
+                <div class="w-8 h-8 bg-purple-50 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-book text-purple-500 text-sm"></i>
+                </div>
+            </div>
+            <div class="text-4xl font-black text-gray-900 leading-none mb-1">{{ number_format($totalBooks) }}</div>
+            <div class="text-xs text-gray-400 font-medium mt-2">
+                <span class="font-bold text-gray-600">+{{ $newBooksThisMonth }}</span> buku bulan ini
+            </div>
+        </div>
+
+        {{-- Card 3: Siswa --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition">
+            <div class="flex items-start justify-between mb-3">
+                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Total Siswa</div>
+                <div class="w-8 h-8 bg-amber-50 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-users text-amber-500 text-sm"></i>
+                </div>
+            </div>
+            <div class="text-4xl font-black text-gray-900 leading-none mb-1">{{ number_format($totalStudents) }}</div>
+            <div class="text-xs font-medium mt-2">
+                @if ($pendingMembers > 0)
+                    <span class="text-amber-500 font-bold"><i class="fas fa-clock text-[10px]"></i> {{ $pendingMembers }} menunggu</span>
+                @else
+                    <span class="text-gray-400"><span class="font-bold text-gray-600">+{{ $newStudentsThisMonth }}</span> bulan ini</span>
+                @endif
+            </div>
+        </div>
+
+        {{-- Card 4: Transaksi Aktif --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition">
+            <div class="flex items-start justify-between mb-3">
+                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Pinjam Aktif</div>
+                <div class="w-8 h-8 {{ $lateBorrows > 0 ? 'bg-red-50' : 'bg-orange-50' }} rounded-xl flex items-center justify-center">
+                    <i class="fas fa-exchange-alt {{ $lateBorrows > 0 ? 'text-red-500' : 'text-orange-500' }} text-sm"></i>
+                </div>
+            </div>
+            <div class="text-4xl font-black {{ $lateBorrows > 0 ? 'text-red-600' : 'text-gray-900' }} leading-none mb-1">{{ $activeBorrows }}</div>
+            <div class="text-xs font-medium mt-2">
+                @if ($lateBorrows > 0)
+                    <span class="text-red-500 font-bold"><i class="fas fa-exclamation-triangle text-[10px]"></i> {{ $lateBorrows }} terlambat</span>
+                @else
+                    <span class="text-evergreen-600 font-bold">Semua tepat waktu</span>
+                @endif
+            </div>
         </div>
     </div>
-</div>
+
+    {{-- ── MANAGE SCHOOLS FILTER ── --}}
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="font-bold text-gray-900 flex items-center gap-2">
+            <i class="fas fa-building text-evergreen-500 text-sm"></i> Kelola Sekolah
+            <span class="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-0.5 rounded-full ml-1">{{ $schools->count() }}</span>
+        </h2>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 mb-6">
+        <div class="relative flex-1">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fas fa-search text-gray-400 text-sm"></i>
+            </div>
+            <input type="text" id="schoolSearch" oninput="filterSchools()" placeholder="Cari nama sekolah atau NPSN..."
+                class="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-evergreen-500/20 focus:border-evergreen-500 transition">
+        </div>
+        <select id="statusFilter" onchange="filterSchools()"
+            class="w-full sm:w-48 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-evergreen-500/20 focus:border-evergreen-500 transition cursor-pointer text-gray-700">
+            <option value="">Semua Status</option>
+            <option value="active">Aktif</option>
+            <option value="inactive">Nonaktif</option>
+        </select>
+    </div>
+
+    {{-- ── SCHOOL GRID ── --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="schoolGrid">
+        @forelse($schools as $school)
+            <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-gray-200 transition cursor-pointer group school-card"
+                data-id="{{ $school->id }}" data-name="{{ strtolower($school->name) }}" data-npsn="{{ $school->npsn }}" data-status="{{ $school->status }}">
+
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center flex-shrink-0 border border-gray-100 group-hover:bg-evergreen-50 transition">
+                        <i class="fas fa-school text-gray-400 group-hover:text-evergreen-600 text-lg transition"></i>
+                    </div>
+                    <div class="flex-1 min-w-0 pt-0.5">
+                        <h3 class="text-sm font-bold text-gray-900 truncate group-hover:text-evergreen-700 transition">{{ $school->name }}</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">NPSN: {{ $school->npsn }}</p>
+                        @if ($school->status === 'active')
+                            <span class="inline-flex items-center gap-1.5 mt-2 bg-evergreen-50 border border-evergreen-100 text-evergreen-700 text-[10px] font-bold px-2 py-0.5 rounded-md tracking-wide">
+                                <span class="w-1.5 h-1.5 bg-evergreen-500 rounded-full"></span> AKTIF
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 mt-2 bg-red-50 border border-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-md tracking-wide">
+                                <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> NONAKTIF
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    <div class="bg-gray-50 rounded-xl py-2 px-1 text-center border border-gray-100/50">
+                        <span class="block text-sm font-black text-gray-900">{{ number_format($school->books_count) }}</span>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-0.5 block">Buku</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl py-2 px-1 text-center border border-gray-100/50">
+                        <span class="block text-sm font-black text-gray-900">{{ number_format($school->students_count) }}</span>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-0.5 block">Siswa</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl py-2 px-1 text-center border border-gray-100/50">
+                        <span class="block text-sm font-black text-gray-900">{{ $school->admins_count }}</span>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-0.5 block">Admin</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                    <div class="text-[11px] text-gray-500">
+                        Denda: <span class="font-bold {{ ($school->total_fine ?? 0) > 0 ? 'text-red-600' : 'text-gray-900' }}">Rp {{ number_format($school->total_fine ?? 0, 0, ',', '.') }}</span>
+                        <span class="mx-1 text-gray-300">•</span>
+                        Trx: <span class="font-bold text-gray-900">{{ $school->active_borrows_count }}</span>
+                    </div>
+                    <button onclick="openDetail({{ $school->id }})" class="text-[11px] font-bold text-evergreen-600 hover:text-evergreen-700 bg-evergreen-50/50 hover:bg-evergreen-50 px-3 py-1.5 rounded-lg border border-evergreen-100/50 transition">Detail →</button>
+                </div>
+            </div>
+        @empty
+            <div class="col-span-full py-16 text-center bg-white rounded-2xl border border-gray-100">
+                <i class="fas fa-school text-5xl text-gray-200 mb-3 block"></i>
+                <p class="text-gray-500 font-medium text-sm">Belum ada sekolah terdaftar.</p>
+            </div>
+        @endforelse
+    </div>
+
+    {{-- ── DETAIL MODAL ── --}}
+    <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 modal-overlay p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh]">
+
+            {{-- Header --}}
+            <div class="bg-gradient-to-r from-evergreen-800 to-evergreen-900 px-6 py-5 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center border border-white/10">
+                        <i class="fas fa-building text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white leading-tight" id="dp-name">—</h2>
+                        <p class="text-xs text-evergreen-200 mt-0.5" id="dp-npsn">—</p>
+                    </div>
+                </div>
+                <button onclick="closeDetail()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition border border-white/10">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            {{-- Body --}}
+            <div class="p-6 overflow-y-auto flex-1 bg-gray-50/30">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+
+                    {{-- Info Column --}}
+                    <div class="md:col-span-2 space-y-5">
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            <i class="fas fa-info-circle text-gray-300"></i> Info Utama
+                        </div>
+
+                        <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm space-y-4">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Nama Lengkap Sekolah</p>
+                                <p class="text-sm font-bold text-gray-900 mt-0.5" id="dp-full-name">—</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">NPSN</p>
+                                <p class="text-sm font-semibold text-gray-900 font-mono mt-0.5" id="dp-npsn-val">—</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Alamat Lengkap</p>
+                                <p class="text-sm font-medium text-gray-700 mt-0.5 leading-relaxed" id="dp-addr">—</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 pt-3 border-t border-gray-50">
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Kontak</p>
+                                    <p class="text-sm font-medium text-gray-900 mt-0.5" id="dp-contact">—</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Email</p>
+                                    <p class="text-xs font-medium text-gray-900 mt-0.5 truncate" id="dp-email">—</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Stats & Admin Column --}}
+                    <div class="md:col-span-3 space-y-5">
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            <i class="fas fa-chart-pie text-gray-300"></i> Statistik & Pengelola
+                        </div>
+
+                        {{-- Stats Grid --}}
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div class="bg-white border border-gray-100 rounded-xl p-3 text-center shadow-sm">
+                                <span class="block text-xl font-black text-gray-900" id="dp-books">—</span>
+                                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider mt-1 block">Total Buku</span>
+                            </div>
+                            <div class="bg-white border border-gray-100 rounded-xl p-3 text-center shadow-sm">
+                                <span class="block text-xl font-black text-gray-900" id="dp-students">—</span>
+                                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider mt-1 block">Siswa Aktif</span>
+                            </div>
+                            <div class="bg-white border border-gray-100 rounded-xl p-3 text-center shadow-sm">
+                                <span class="block text-xl font-black text-gray-900" id="dp-trx">—</span>
+                                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider mt-1 block">Transaksi</span>
+                            </div>
+                            <div class="bg-red-50 border border-red-100 rounded-xl p-3 text-center shadow-sm">
+                                <span class="block text-xl font-black text-red-600" id="dp-fine">—</span>
+                                <span class="text-[9px] font-bold text-red-400 uppercase tracking-wider mt-1 block">Total Denda</span>
+                            </div>
+                        </div>
+
+                        {{-- Admin List --}}
+                        <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                            <div class="px-4 py-3 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
+                                <span class="text-xs font-bold text-gray-600">Daftar Admin</span>
+                                <span class="text-[10px] font-bold bg-evergreen-100 text-evergreen-700 px-2 py-0.5 rounded-full" id="dp-admins-count">0</span>
+                            </div>
+                            <div class="p-2 space-y-2 max-h-[160px] overflow-y-auto" id="dp-admin-list">
+                                {{-- JS Injected Admins --}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {{-- Footer / Actions --}}
+            <div class="px-6 py-4 bg-white border-t border-gray-100 flex items-center justify-end gap-3 flex-shrink-0">
+                <a href="#" id="dp-edit-link" class="px-5 py-2.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 text-sm font-bold rounded-xl transition flex items-center gap-2">
+                    <i class="fas fa-edit text-xs"></i> Edit Data
+                </a>
+                <a href="#" id="dp-delete-link" class="px-5 py-2.5 bg-red-50 hover:bg-red-100 border border-red-100 text-red-600 text-sm font-bold rounded-xl transition flex items-center gap-2">
+                    <i class="fas fa-trash text-xs"></i> Hapus Sekolah
+                </a>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
 @push('scripts')
 <script>
-    // ── School data injected from controller ──
+    // Data sekolah dari controller (tetap sama logic-nya)
     const schoolsData = @json($schools->keyBy('id'));
 
+    // Fitur Filter Search & Status
     function filterSchools() {
         const q = document.getElementById('schoolSearch').value.toLowerCase();
         const st = document.getElementById('statusFilter').value;
@@ -555,7 +309,8 @@
         });
     }
 
-    function openDetail(id, event) {
+    // Buka Modal Detail
+    function openDetail(id) {
         const s = schoolsData[id];
         if (!s) return;
 
@@ -563,58 +318,76 @@
         document.getElementById('dp-npsn').textContent = 'NPSN: ' + s.npsn;
         document.getElementById('dp-full-name').textContent = s.name;
         document.getElementById('dp-npsn-val').textContent = s.npsn;
-        document.getElementById('dp-addr').textContent = s.address || '—';
+        document.getElementById('dp-addr').textContent = s.address || 'Belum diatur';
         document.getElementById('dp-contact').textContent = s.phone || '—';
         document.getElementById('dp-email').textContent = s.email || '—';
+
         document.getElementById('dp-books').textContent = (s.books_count || 0).toLocaleString('id-ID');
         document.getElementById('dp-students').textContent = (s.students_count || 0).toLocaleString('id-ID');
-        document.getElementById('dp-admins').textContent = s.admins_count || 0;
         document.getElementById('dp-trx').textContent = s.active_borrows_count || 0;
-        document.getElementById('dp-fine').textContent = 'Rp ' + (s.total_fine || 0).toLocaleString('id-ID');
 
-        // Edit/delete links
+        const denda = s.total_fine || 0;
+        document.getElementById('dp-fine').textContent = (denda > 0 ? 'Rp ' : '') + denda.toLocaleString('id-ID');
+
+        // Link actions
         document.getElementById('dp-edit-link').href = `/superadmin/schools/${id}/edit`;
-        document.getElementById('dp-delete-link').href = `/superadmin/schools/${id}`;
         document.getElementById('dp-delete-link').setAttribute('data-id', id);
 
-        // Admin list - placeholder (needs separate API call in real impl)
+        // Render Admin list
         const adminListEl = document.getElementById('dp-admin-list');
+        document.getElementById('dp-admins-count').textContent = s.admins_count || 0;
+
         if (s.admins && s.admins.length > 0) {
             adminListEl.innerHTML = s.admins.map((a, i) => `
-                <div class="admin-row">
-                    <div class="admin-num">${i + 1}</div>
-                    <div>
-                        <div class="admin-name">${a.full_name}</div>
-                        <div class="admin-info">@${a.username} · ${a.email || '—'}</div>
+                <div class="flex items-center gap-3 p-2 rounded-lg bg-white border border-gray-50 hover:bg-gray-50 transition">
+                    <div class="w-8 h-8 rounded-full bg-evergreen-50 border border-evergreen-100 flex items-center justify-center text-xs font-bold text-evergreen-600 flex-shrink-0">
+                        ${i + 1}
+                    </div>
+                    <div class="min-w-0">
+                        <div class="text-xs font-bold text-gray-900 truncate">${a.full_name}</div>
+                        <div class="text-[10px] text-gray-500 truncate">@${a.username} · ${a.email || '-'}</div>
                     </div>
                 </div>
             `).join('');
         } else {
             adminListEl.innerHTML = `
-                <div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">
-                    <i class="fas fa-users" style="font-size:18px;opacity:0.2;display:block;margin-bottom:6px;"></i>
-                    Data admin belum tersedia
+                <div class="text-center py-6">
+                    <i class="fas fa-users text-gray-200 text-2xl mb-2"></i>
+                    <p class="text-xs font-medium text-gray-400">Data admin belum tersedia</p>
                 </div>`;
         }
 
-        const panel = document.getElementById('detailPanel');
-        panel.classList.add('open');
-        setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+        // Tampilkan Modal
+        document.getElementById('detailModal').classList.remove('hidden');
+        document.getElementById('detailModal').classList.add('flex');
+        document.body.style.overflow = 'hidden'; // Kunci scroll di background
     }
 
+    // Tutup Modal Detail
     function closeDetail() {
-        document.getElementById('detailPanel').classList.remove('open');
+        document.getElementById('detailModal').classList.add('hidden');
+        document.getElementById('detailModal').classList.remove('flex');
+        document.body.style.overflow = ''; // Balikin scroll
     }
 
-    // Delete with form submit
+    // Close Modal via klik overlay hitam
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+        if (e.target === this) closeDetail();
+    });
+
+    // Form Delete (Hapus Sekolah)
     document.getElementById('dp-delete-link').addEventListener('click', function(e) {
         e.preventDefault();
-        if (!confirm('Yakin ingin menghapus sekolah ini? Aksi ini tidak dapat dibatalkan.')) return;
+        if (!confirm('Yakin ingin menghapus sekolah ini? Aksi ini akan menghapus semua data terkait!')) return;
+
         const id = this.dataset.id;
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/superadmin/schools/${id}`;
-        form.innerHTML = `@csrf @method('DELETE')`.replace('@csrf', '<input type="hidden" name="_token" value="{{ csrf_token() }}">').replace("@method('DELETE')", '<input type="hidden" name="_method" value="DELETE">');
+        form.innerHTML = `
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="_method" value="DELETE">
+        `;
         document.body.appendChild(form);
         form.submit();
     });

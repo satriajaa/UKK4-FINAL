@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/schools/{school}/edit', [SchoolController::class, 'edit'])->name('schools.edit');
     Route::put('/schools/{school}', [SchoolController::class, 'update'])->name('schools.update');
     Route::delete('/schools/{school}', [SchoolController::class, 'destroy'])->name('schools.destroy');
+    Route::get('/schools/{school}', [SchoolController::class, 'show'])->name('schools.show');
 
     });
 
