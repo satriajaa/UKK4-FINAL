@@ -56,7 +56,7 @@ class BookController extends Controller
             'isbn'             => 'nullable|string|max:20|unique:books,isbn',
             // DIUBAH: dari 'category_id' => 'required|exists:...'
             // menjadi 'categories' array, ambil yang pertama sebagai category_id
-            'categories'       => 'required|array|min:1',
+            'category_id' => 'required|exists:categories,id',
             'categories.*'     => 'exists:categories,id',
             'stock'            => 'required|integer|min:0',
             'shelf_location'   => 'nullable|string|max:50',
@@ -76,7 +76,7 @@ class BookController extends Controller
 
         $book = Book::create([
             'school_id'        => $schoolId,
-            'category_id'      => $categoryId,
+            'category_id'      => $request->category_id,
             'title'            => $request->title,
             'author'           => $request->author,
             'publisher'        => $request->publisher,
@@ -108,7 +108,7 @@ class BookController extends Controller
             'publication_year' => 'nullable|integer|min:1900|max:' . date('Y'),
             'isbn'             => 'nullable|string|max:20|unique:books,isbn,' . $book->id,
             // DIUBAH: sama seperti store, pakai array categories
-            'categories'       => 'required|array|min:1',
+            'category_id' => 'required|exists:categories,id',
             'categories.*'     => 'exists:categories,id',
             'stock'            => 'required|integer|min:0',
             'shelf_location'   => 'nullable|string|max:50',
@@ -125,7 +125,7 @@ class BookController extends Controller
         $categoryId = $request->categories[0];
 
         $book->update([
-            'category_id'      => $categoryId,
+            'category_id'      => $request->category_id,
             'title'            => $request->title,
             'author'           => $request->author,
             'publisher'        => $request->publisher,

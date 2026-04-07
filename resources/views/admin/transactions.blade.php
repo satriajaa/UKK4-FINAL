@@ -310,13 +310,21 @@
                                             {{ $trx->return_requested_at?->diffForHumans() }}</div>
                                     </td>
                                     <td class="px-5 py-4">
-                                        @if ($estFine > 0)
-                                            <span class="text-sm font-bold text-red-600">Rp
-                                                {{ number_format($estFine, 0, ',', '.') }}</span>
-                                        @else
-                                            <span class="text-sm text-evergreen-600 font-semibold">Tidak ada</span>
-                                        @endif
-                                    </td>
+    @php
+        // Hitung estimasi denda real-time pakai function di Model
+        $estFine = $trx->calculateFine($finePerDay);
+    @endphp
+
+    @if($estFine > 0)
+        <span class="text-sm font-bold text-red-600">
+            Rp {{ number_format($estFine, 0, ',', '.') }}
+        </span>
+    @else
+        <span class="text-sm font-semibold text-evergreen-600">
+            Tidak ada
+        </span>
+    @endif
+</td>
                                     <td class="px-5 py-4">
                                         <div class="flex items-center justify-center">
                                             <form method="POST"
@@ -419,14 +427,14 @@
                 <i class="fas fa-plus text-[10px]"></i> Peminjaman Baru
             </button>
             <div class="flex-1"></div>
-            <a href="{{ route('admin.transactions.index', array_merge(request()->query(), ['export' => 'excel'])) }}"
+            {{-- <a href="{{ route('admin.transactions.index', array_merge(request()->query(), ['export' => 'excel'])) }}"
                 class="flex items-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-lg transition">
                 <i class="fas fa-file-excel text-green-600 text-[10px]"></i> Export Excel
             </a>
             <button onclick="window.print()"
                 class="flex items-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-lg transition">
                 <i class="fas fa-print text-[10px]"></i> Cetak A4
-            </button>
+            </button> --}}
         </div>
 
         {{-- Table --}}

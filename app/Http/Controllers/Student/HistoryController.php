@@ -39,14 +39,15 @@ class HistoryController extends Controller
         $totalActive   = $activeBorrows->whereIn('status', ['borrowed', 'late'])->count();
         $totalLate     = $activeBorrows->where('status', 'late')->count();
         $totalFine     = Borrowing::where('user_id', $userId)->sum('fine');
-
+        $totalPending = $activeBorrows->where('status', 'pending')->count();
         return view('student.history', compact(
             'activeBorrows',
             'returnedBorrows',
             'totalBorrowed',
             'totalActive',
             'totalLate',
-            'totalFine'
+            'totalFine',
+            'totalPending'
         ));
     }
 

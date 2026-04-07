@@ -61,10 +61,14 @@ class TransactionController extends Controller
         $totalFine         = Borrowing::where('school_id', $schoolId)->sum('fine');
         $unpaidFine        = Borrowing::where('school_id', $schoolId)->where('status', 'late')->count();
 
+        $setting = Setting::getForSchool($schoolId);
+        $finePerDay = $setting->fine_per_day ?? 1000;
+
         return view('admin.transactions', compact(
             'transactions', 'pendingBorrows', 'returnRequests',
             'pendingBorrowCount', 'pendingReturnCount',
-            'totalTransactions', 'totalFine', 'unpaidFine'
+            'totalTransactions', 'totalFine', 'unpaidFine',
+'finePerDay'
         ));
     }
 

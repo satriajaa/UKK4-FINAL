@@ -390,24 +390,17 @@
                     </div>
                 </div>
 
-                {{-- Kategori (CHECKBOX MULTIPLE) --}}
+                {{-- Kategori --}}
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Kategori <span
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kategori <span
                             class="text-red-500">*</span></label>
-                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 max-h-48 overflow-y-auto">
-                        <div class="space-y-2">
-                            @foreach ($categories as $cat)
-                                <label
-                                    class="flex items-center gap-2 cursor-pointer hover:bg-white p-2 rounded-lg transition">
-                                    <input type="checkbox" name="categories[]" value="{{ $cat->id }}"
-                                        class="w-4 h-4 text-evergreen-600 border-gray-300 rounded focus:ring-evergreen-500">
-                                    <span class="text-sm text-gray-700">{{ $cat->name }}</span>
-                                    <span class="text-xs text-gray-400 ml-auto">({{ $cat->books_count ?? 0 }} buku)</span>
-                                </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-1">Pilih satu atau lebih kategori untuk buku ini</p>
+                    <select name="category_id" required
+                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
+                        <option value="">Pilih Kategori</option>
+                        @foreach ($categories as $cat)
+                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 {{-- Stok & Lokasi Rak --}}
@@ -446,137 +439,133 @@
             </form>
         </div>
     </div>
-{{-- ════════════ MODAL: EDIT BUKU (FIXED) ════════════ --}}
-<div id="modal-edit-book" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100 sticky top-0 bg-white z-10">
-            <h3 class="text-lg font-bold text-gray-900">Edit Data Buku</h3>
-            <button onclick="document.getElementById('modal-edit-book').classList.add('hidden')"
-                class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <form id="form-edit-book" method="POST" enctype="multipart/form-data" class="px-6 py-5 space-y-4">
-            @csrf
-            @method('PUT')
+    {{-- ════════════ MODAL: EDIT BUKU (FIXED) ════════════ --}}
+    <div id="modal-edit-book" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100 sticky top-0 bg-white z-10">
+                <h3 class="text-lg font-bold text-gray-900">Edit Data Buku</h3>
+                <button onclick="document.getElementById('modal-edit-book').classList.add('hidden')"
+                    class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="form-edit-book" method="POST" enctype="multipart/form-data" class="px-6 py-5 space-y-4">
+                @csrf
+                @method('PUT')
 
-            {{-- SAMPUL BUKU - DENGAN PREVIEW (FIXED) --}}
-            <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Sampul Buku</label>
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0">
-                        <div id="edit-cover-preview-container"
-                            class="w-24 h-32 bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
-                            {{-- img akan diisi via JS --}}
-                            <img id="edit-cover-preview" src="#" alt="Preview"
-                                class="hidden w-full h-full object-cover">
-                            <i id="edit-cover-preview-icon" class="fas fa-image text-3xl text-gray-400"></i>
+                {{-- SAMPUL BUKU - DENGAN PREVIEW (FIXED) --}}
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Sampul Buku</label>
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div id="edit-cover-preview-container"
+                                class="w-24 h-32 bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
+                                {{-- img akan diisi via JS --}}
+                                <img id="edit-cover-preview" src="#" alt="Preview"
+                                    class="hidden w-full h-full object-cover">
+                                <i id="edit-cover-preview-icon" class="fas fa-image text-3xl text-gray-400"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex-1">
-                        <div class="relative">
-                            <input type="file" name="cover" id="edit-cover-input" accept="image/*"
-                                onchange="previewEditCover(this)"
-                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            <button type="button"
-                                onclick="document.getElementById('edit-cover-input').click()"
-                                class="w-full px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl transition text-sm border-2 border-dashed border-blue-200">
-                                <i class="fas fa-upload mr-2"></i>Ganti Sampul
+                        <div class="flex-1">
+                            <div class="relative">
+                                <input type="file" name="cover" id="edit-cover-input" accept="image/*"
+                                    onchange="previewEditCover(this)"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <button type="button" onclick="document.getElementById('edit-cover-input').click()"
+                                    class="w-full px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl transition text-sm border-2 border-dashed border-blue-200">
+                                    <i class="fas fa-upload mr-2"></i>Ganti Sampul
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Kosongkan jika tidak ingin mengubah sampul</p>
+                            <button type="button" onclick="removeEditCover()"
+                                class="text-xs text-red-600 hover:text-red-800 mt-1 hidden" id="remove-edit-cover-btn">
+                                <i class="fas fa-trash mr-1"></i>Hapus preview
                             </button>
                         </div>
-                        <p class="text-xs text-gray-500 mt-2">Kosongkan jika tidak ingin mengubah sampul</p>
-                        <button type="button" onclick="removeEditCover()"
-                            class="text-xs text-red-600 hover:text-red-800 mt-1 hidden" id="remove-edit-cover-btn">
-                            <i class="fas fa-trash mr-1"></i>Hapus preview
-                        </button>
                     </div>
                 </div>
-            </div>
 
-            {{-- Judul --}}
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Judul Buku <span class="text-red-500">*</span></label>
-                <input type="text" name="title" id="edit-title" required
-                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
-            </div>
-
-            {{-- Penulis & Penerbit --}}
-            <div class="grid grid-cols-2 gap-3">
+                {{-- Judul --}}
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Penulis</label>
-                    <input type="text" name="author" id="edit-author"
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Judul Buku <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" name="title" id="edit-title" required
                         class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Penerbit</label>
-                    <input type="text" name="publisher" id="edit-publisher"
-                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
-                </div>
-            </div>
 
-            {{-- ISBN & Tahun Terbit --}}
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">ISBN</label>
-                    <input type="text" name="isbn" id="edit-isbn"
-                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tahun Terbit</label>
-                    <input type="number" name="publication_year" id="edit-publication-year"
-                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
-                </div>
-            </div>
-
-            {{-- KATEGORI - CHECKBOX MULTIPLE (FIXED dari select biasa) --}}
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Kategori <span class="text-red-500">*</span></label>
-                <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 max-h-48 overflow-y-auto">
-                    <div class="space-y-2" id="edit-categories-container">
-                        @foreach ($categories as $cat)
-                            <label class="flex items-center gap-2 cursor-pointer hover:bg-white p-2 rounded-lg transition">
-                                <input type="checkbox" name="categories[]" value="{{ $cat->id }}"
-                                    class="edit-category-checkbox w-4 h-4 text-evergreen-600 border-gray-300 rounded focus:ring-evergreen-500">
-                                <span class="text-sm text-gray-700">{{ $cat->name }}</span>
-                                <span class="text-xs text-gray-400 ml-auto">({{ $cat->books_count ?? 0 }} buku)</span>
-                            </label>
-                        @endforeach
+                {{-- Penulis & Penerbit --}}
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Penulis</label>
+                        <input type="text" name="author" id="edit-author"
+                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Penerbit</label>
+                        <input type="text" name="publisher" id="edit-publisher"
+                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
                     </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">Pilih satu atau lebih kategori</p>
-            </div>
 
-            {{-- Stok & Lokasi Rak --}}
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Stok <span class="text-red-500">*</span></label>
-                    <input type="number" name="stock" id="edit-stock" required min="0"
-                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
+                {{-- ISBN & Tahun Terbit --}}
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">ISBN</label>
+                        <input type="text" name="isbn" id="edit-isbn"
+                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tahun Terbit</label>
+                        <input type="number" name="publication_year" id="edit-publication-year"
+                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Lokasi Rak</label>
-                    <input type="text" name="shelf_location" id="edit-shelf-location"
-                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
-                </div>
-            </div>
 
-            {{-- Sinopsis --}}
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Sinopsis</label>
-                <textarea name="synopsis" id="edit-synopsis" rows="3"
-                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none resize-none"></textarea>
-            </div>
-
-            {{-- Tombol --}}
-            <div class="flex gap-3 pt-2">
-                <button type="button" onclick="document.getElementById('modal-edit-book').classList.add('hidden')"
-                    class="flex-1 py-2.5 border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 text-sm">Batal</button>
-                <button type="submit"
-                    class="flex-[2] py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm">Update Data</button>
-            </div>
-        </form>
-    </div>
+                {{-- Kategori --}}
+<div>
+    <label class="block text-sm font-semibold text-gray-700 mb-2">Kategori <span class="text-red-500">*</span></label>
+    <select name="category_id" id="edit-category-id" required
+        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
+        <option value="">Pilih Kategori</option>
+        @foreach ($categories as $cat)
+            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+        @endforeach
+    </select>
 </div>
+
+                {{-- Stok & Lokasi Rak --}}
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Stok <span
+                                class="text-red-500">*</span></label>
+                        <input type="number" name="stock" id="edit-stock" required min="0"
+                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Lokasi Rak</label>
+                        <input type="text" name="shelf_location" id="edit-shelf-location"
+                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
+                    </div>
+                </div>
+
+                {{-- Sinopsis --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Sinopsis</label>
+                    <textarea name="synopsis" id="edit-synopsis" rows="3"
+                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none resize-none"></textarea>
+                </div>
+
+                {{-- Tombol --}}
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('modal-edit-book').classList.add('hidden')"
+                        class="flex-1 py-2.5 border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 text-sm">Batal</button>
+                    <button type="submit"
+                        class="flex-[2] py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm">Update
+                        Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 
     {{-- ════════════ MODAL: TAMBAH KATEGORI ════════════ --}}
@@ -621,158 +610,159 @@
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
 
-    // ── Restore active tab dari session ────────────────────────
-    @if(session('last_tab'))
-        const activeTabId = "{{ session('last_tab') }}";
-        const tabButton = document.querySelector(`button[onclick*='${activeTabId}']`);
-        if (tabButton) switchTab(activeTabId, tabButton);
-    @endif
+            // ── Restore active tab dari session ────────────────────────
+            @if (session('last_tab'))
+                const activeTabId = "{{ session('last_tab') }}";
+                const tabButton = document.querySelector(`button[onclick*='${activeTabId}']`);
+                if (tabButton) switchTab(activeTabId, tabButton);
+            @endif
 
-    // ── Close modals on backdrop click ─────────────────────────
-    ['modal-add-book', 'modal-add-cat', 'modal-edit-book'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('click', function (e) {
-            if (e.target === this) this.classList.add('hidden');
+            // ── Close modals on backdrop click ─────────────────────────
+            ['modal-add-book', 'modal-add-cat', 'modal-edit-book'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('click', function(e) {
+                    if (e.target === this) this.classList.add('hidden');
+                });
+            });
         });
-    });
-});
 
-// ── Tab Switching ───────────────────────────────────────────
-function switchTab(id, btn) {
-    ['tab-books', 'tab-categories'].forEach(t => document.getElementById(t).classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-    document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.remove('border-evergreen-600', 'text-evergreen-600');
-        b.classList.add('border-transparent', 'text-gray-400');
-    });
-    btn.classList.add('border-evergreen-600', 'text-evergreen-600');
-    btn.classList.remove('border-transparent', 'text-gray-400');
-}
+        // ── Tab Switching ───────────────────────────────────────────
+        function switchTab(id, btn) {
+            ['tab-books', 'tab-categories'].forEach(t => document.getElementById(t).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('border-evergreen-600', 'text-evergreen-600');
+                b.classList.add('border-transparent', 'text-gray-400');
+            });
+            btn.classList.add('border-evergreen-600', 'text-evergreen-600');
+            btn.classList.remove('border-transparent', 'text-gray-400');
+        }
 
-// ── Preview Sampul: Modal TAMBAH ────────────────────────────
-function previewCover(input) {
-    const preview = document.getElementById('cover-preview');
-    const icon    = document.getElementById('cover-preview-icon');
-    const removeBtn = document.getElementById('remove-cover-btn');
+        // ── Preview Sampul: Modal TAMBAH ────────────────────────────
+        function previewCover(input) {
+            const preview = document.getElementById('cover-preview');
+            const icon = document.getElementById('cover-preview-icon');
+            const removeBtn = document.getElementById('remove-cover-btn');
 
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-            preview.classList.remove('hidden');
-            icon.classList.add('hidden');
-            removeBtn.classList.remove('hidden');
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    icon.classList.add('hidden');
+                    removeBtn.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
-function removeCover() {
-    document.getElementById('cover-input').value = '';
-    document.getElementById('cover-preview').src = '#';
-    document.getElementById('cover-preview').classList.add('hidden');
-    document.getElementById('cover-preview-icon').classList.remove('hidden');
-    document.getElementById('remove-cover-btn').classList.add('hidden');
-}
+        function removeCover() {
+            document.getElementById('cover-input').value = '';
+            document.getElementById('cover-preview').src = '#';
+            document.getElementById('cover-preview').classList.add('hidden');
+            document.getElementById('cover-preview-icon').classList.remove('hidden');
+            document.getElementById('remove-cover-btn').classList.add('hidden');
+        }
 
-// ── Preview Sampul: Modal EDIT ──────────────────────────────
-function previewEditCover(input) {
-    const preview   = document.getElementById('edit-cover-preview');
-    const icon      = document.getElementById('edit-cover-preview-icon');
-    const removeBtn = document.getElementById('remove-edit-cover-btn');
+        // ── Preview Sampul: Modal EDIT ──────────────────────────────
+        function previewEditCover(input) {
+            const preview = document.getElementById('edit-cover-preview');
+            const icon = document.getElementById('edit-cover-preview-icon');
+            const removeBtn = document.getElementById('remove-edit-cover-btn');
 
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-            preview.classList.remove('hidden');
-            icon.classList.add('hidden');
-            removeBtn.classList.remove('hidden');
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    icon.classList.add('hidden');
+                    removeBtn.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
-function removeEditCover() {
-    document.getElementById('edit-cover-input').value = '';
-    const preview = document.getElementById('edit-cover-preview');
-    preview.src = '#';
-    preview.classList.add('hidden');
-    document.getElementById('edit-cover-preview-icon').classList.remove('hidden');
-    document.getElementById('remove-edit-cover-btn').classList.add('hidden');
-}
+        function removeEditCover() {
+            document.getElementById('edit-cover-input').value = '';
+            const preview = document.getElementById('edit-cover-preview');
+            preview.src = '#';
+            preview.classList.add('hidden');
+            document.getElementById('edit-cover-preview-icon').classList.remove('hidden');
+            document.getElementById('remove-edit-cover-btn').classList.add('hidden');
+        }
 
-// ── Buka Modal Edit Buku ────────────────────────────────────
-function openEditModal(book) {
-    const modal = document.getElementById('modal-edit-book');
-    const form  = document.getElementById('form-edit-book');
+        // ── Buka Modal Edit Buku ────────────────────────────────────
+        function openEditModal(book) {
+            const modal = document.getElementById('modal-edit-book');
+            const form = document.getElementById('form-edit-book');
 
-    // Set action URL
-    form.action = `/admin/books/${book.id}`;
+            // Set action URL
+            form.action = `/admin/books/${book.id}`;
 
-    // Isi field teks
-    document.getElementById('edit-title').value            = book.title           ?? '';
-    document.getElementById('edit-author').value           = book.author          ?? '';
-    document.getElementById('edit-publisher').value        = book.publisher       ?? '';
-    document.getElementById('edit-isbn').value             = book.isbn            ?? '';
-    document.getElementById('edit-publication-year').value = book.publication_year ?? '';
-    document.getElementById('edit-stock').value            = book.stock           ?? 0;
-    document.getElementById('edit-shelf-location').value   = book.shelf_location  ?? '';
-    document.getElementById('edit-synopsis').value         = book.synopsis        ?? '';
+            // Isi field teks
+            document.getElementById('edit-title').value = book.title ?? '';
+            document.getElementById('edit-author').value = book.author ?? '';
+            document.getElementById('edit-publisher').value = book.publisher ?? '';
+            document.getElementById('edit-isbn').value = book.isbn ?? '';
+            document.getElementById('edit-publication-year').value = book.publication_year ?? '';
+            document.getElementById('edit-stock').value = book.stock ?? 0;
+            document.getElementById('edit-shelf-location').value = book.shelf_location ?? '';
+            document.getElementById('edit-synopsis').value = book.synopsis ?? '';
 
-    // ── PREVIEW SAMPUL yang sudah ada ──────────────────────
-    const preview   = document.getElementById('edit-cover-preview');
-    const icon      = document.getElementById('edit-cover-preview-icon');
-    const removeBtn = document.getElementById('remove-edit-cover-btn');
-    // Reset dulu
-    preview.classList.add('hidden');
-    icon.classList.remove('hidden');
-    removeBtn.classList.add('hidden');
-    document.getElementById('edit-cover-input').value = '';
+            // ── PREVIEW SAMPUL yang sudah ada ──────────────────────
+            const preview = document.getElementById('edit-cover-preview');
+            const icon = document.getElementById('edit-cover-preview-icon');
+            const removeBtn = document.getElementById('remove-edit-cover-btn');
+            // Reset dulu
+            preview.classList.add('hidden');
+            icon.classList.remove('hidden');
+            removeBtn.classList.add('hidden');
+            document.getElementById('edit-cover-input').value = '';
 
-    if (book.cover) {
-        // book.cover = path relatif, mis: "covers/1/abc.jpg"
-        preview.src = `/storage/${book.cover}`;
-        preview.classList.remove('hidden');
-        icon.classList.add('hidden');
-    }
+            if (book.cover) {
+                // book.cover = path relatif, mis: "covers/1/abc.jpg"
+                preview.src = `/storage/${book.cover}`;
+                preview.classList.remove('hidden');
+                icon.classList.add('hidden');
+            }
 
-    // ── CHECKBOX KATEGORI: centang sesuai category_id buku ─
-    document.querySelectorAll('.edit-category-checkbox').forEach(cb => {
-        // Centang checkbox yang sesuai dengan category_id buku saat ini
-        cb.checked = (parseInt(cb.value) === parseInt(book.category_id));
-    });
+            document.getElementById('edit-category-id').value = book.category_id ?? '';
+            // // ── CHECKBOX KATEGORI: centang sesuai category_id buku ─
+            // document.querySelectorAll('.edit-category-checkbox').forEach(cb => {
+            //     // Centang checkbox yang sesuai dengan category_id buku saat ini
+            //     cb.checked = (parseInt(cb.value) === parseInt(book.category_id));
+            // });
 
-    modal.classList.remove('hidden');
-}
+            modal.classList.remove('hidden');
+        }
 
-// ── Buka Modal Edit Kategori ────────────────────────────────
-function openEditCategoryModal(cat) {
-    const modal = document.getElementById('modal-add-cat');
-    const form  = modal.querySelector('form');
-    modal.querySelector('h3').innerText = 'Edit Kategori';
+        // ── Buka Modal Edit Kategori ────────────────────────────────
+        function openEditCategoryModal(cat) {
+            const modal = document.getElementById('modal-add-cat');
+            const form = modal.querySelector('form');
+            modal.querySelector('h3').innerText = 'Edit Kategori';
 
-    form.action = `/admin/categories/${cat.id}`;
+            form.action = `/admin/categories/${cat.id}`;
 
-    let methodInput = form.querySelector('input[name="_method"]');
-    if (!methodInput) {
-        methodInput = document.createElement('input');
-        methodInput.type  = 'hidden';
-        methodInput.name  = '_method';
-        methodInput.value = 'PUT';
-        form.appendChild(methodInput);
-    } else {
-        methodInput.value = 'PUT';
-    }
+            let methodInput = form.querySelector('input[name="_method"]');
+            if (!methodInput) {
+                methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'PUT';
+                form.appendChild(methodInput);
+            } else {
+                methodInput.value = 'PUT';
+            }
 
-    form.querySelector('input[name="name"]').value            = cat.name        ?? '';
-    form.querySelector('input[name="code"]').value            = cat.code        ?? '';
-    form.querySelector('textarea[name="description"]').value  = cat.description ?? '';
+            form.querySelector('input[name="name"]').value = cat.name ?? '';
+            form.querySelector('input[name="code"]').value = cat.code ?? '';
+            form.querySelector('textarea[name="description"]').value = cat.description ?? '';
 
-    modal.classList.remove('hidden');
-}
-</script>
+            modal.classList.remove('hidden');
+        }
+    </script>
 @endpush
