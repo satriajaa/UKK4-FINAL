@@ -74,11 +74,14 @@
             <select name="class_id" onchange="this.form.submit()"
                 class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-600 focus:ring-2 focus:ring-evergreen-500 outline-none cursor-pointer min-w-[160px]">
                 <option value="">Semua Kelas</option>
-                @foreach (\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->get() as $cls)
+                {{-- @foreach (\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->get() as $cls)
                     <option value="{{ $cls->id }}" {{ request('class_id') == $cls->id ? 'selected' : '' }}>
                         {{ $cls->name }}
                     </option>
-                @endforeach
+                @endforeach --}}
+                 @foreach (\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->whereNotIn('name', ['__level_template__', '__major_template__'])->orderBy('name', 'asc')->get() as $cls)
+                            <option value="{{ $cls->id }}">{{ $cls->name }}</option>
+                        @endforeach
             </select>
 
             <button type="submit"
@@ -347,7 +350,10 @@
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kelas</label>
                     <select name="class_id" id="edit-class-id"
                         class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-evergreen-500 outline-none">
-                        @foreach (\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->get() as $cls)
+                        {{-- @foreach (\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->get() as $cls)
+                            <option value="{{ $cls->id }}">{{ $cls->name }}</option>
+                        @endforeach\ --}}
+                         @foreach (\App\Models\ClassModel::where('school_id', auth()->user()->school_id)->whereNotIn('name', ['__level_template__', '__major_template__'])->orderBy('name', 'asc')->get() as $cls)
                             <option value="{{ $cls->id }}">{{ $cls->name }}</option>
                         @endforeach
                     </select>

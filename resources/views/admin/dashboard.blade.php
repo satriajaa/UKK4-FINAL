@@ -183,11 +183,11 @@
             </div>
         </div>
 
-        <div class="mt-5 pt-5 border-t border-gray-100 grid grid-cols-3 text-center gap-2">
-            <div>
+        <div class="mt-5 pt-5 border-t border-gray-100 grid grid-cols-2 text-center gap-2">
+            {{-- <div>
                 <div class="text-xs text-gray-400 uppercase tracking-wider">Trend</div>
                 <div class="text-sm font-bold text-evergreen-600">+12.5%</div>
-            </div>
+            </div> --}}
             <div>
                 <div class="text-xs text-gray-400 uppercase tracking-wider">Total</div>
                 <div class="text-sm font-bold text-gray-900">{{ $monthTotal }}</div>
