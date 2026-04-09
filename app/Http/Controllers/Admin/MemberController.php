@@ -31,7 +31,7 @@ class MemberController extends Controller
             );
         }
 
-        $members = $query->latest()->paginate(15)->withQueryString();
+        $members = $query->latest()->paginate(10)->withQueryString();
 
         $counts = [
             'all'      => User::where('school_id',$schoolId)->where('role','student')->count(),
